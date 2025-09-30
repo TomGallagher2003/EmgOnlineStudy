@@ -617,7 +617,7 @@ class ExperimentPage(QtWidgets.QWidget):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Movement Timer & Classifier")
+        self.setWindowTitle("Online Study")
         self.resize(900, 640)
         self.stack = QtWidgets.QStackedWidget()
         self.setCentralWidget(self.stack)
