@@ -15,6 +15,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from util.filters import selective_filter
 from util.images import Images
 from recording import Session  # adjust import path if needed
+from util.movement_segmentation import detect_movement_mask
 from util.normalise_data import normalise_data
 from util.windows import window_data
 
@@ -334,6 +335,7 @@ class ParametersPage(QtWidgets.QWidget):
             "trial": trial_num,
             "recording_length": rec_len,
             "filters": filters_struct,
+            "use_auto": self.emg_auto_seg.isChecked()
         }
         self.proceed.emit(params)
 
@@ -572,10 +574,16 @@ class ExperimentPage(QtWidgets.QWidget):
 
         os.makedirs("data", exist_ok=True)
 
+
+        label = detect_movement_mask(data) if self.params["use_auto"] else np.ones(data.shape[1]) * self.current_movement
+        label_type = "auto" if self.params["use_auto"] else "basic"
+
         if SAVE_AS_NPY:
             np.save("data/online_data.npy", data)
             print("[processing] saved trial to data/online_data.npy")
         else:
+            np.savetxt(f"data/trial_{self.params['trial']}_{label_type}_label.csv",
+                       label.transpose(), delimiter=",")
             if getattr(self.session.config, "USE_EMG", False):
                 np.savetxt(f"data/trial_{self.params['trial']}_raw_emg.csv",
                            data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
@@ -584,10 +592,8 @@ class ExperimentPage(QtWidgets.QWidget):
                            data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
             print("Saved raw trial CSVs.")
 
-        # NEW: pass structured filters; update util.filters.selective_filter to accept this:
-        #   expected format: List[{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}]
-        filtered_data = selective_filter(self.params["filters"], data)
 
+        filtered_data = selective_filter(self.params["filters"], data)
         windowed_data = window_data(filtered_data)
         normalised_data = normalise_data(windowed_data)
 
