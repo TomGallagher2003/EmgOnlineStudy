@@ -128,94 +128,215 @@ class DeviceSelectPage(QtWidgets.QWidget):
 
 
 class ParametersPage(QtWidgets.QWidget):
-    """Collect trial number, recording length, and filter A/B/C choices.
-    We only validate and store these; pipeline doesn't use them yet.
+    """Collect trial, recording length, and separate EMG/EEG filter chains A/B/C with Hz inputs.
+
+    Validation rules:
+      - Trial: int
+      - Recording length: float > 0
+      - For each device section that is visible:
+          * Pass: at least one of Lower/Upper; if both provided, lower < upper
+          * Notch: Center required
+    Emitted params:
+      {
+        "trial": int,
+        "recording_length": float,
+        "filters": {
+          "emg": [ {type, lower, upper, center}, x3 ],
+          "eeg": [ {type, lower, upper, center}, x3 ]
+        }
+      }
     """
 
     proceed = QtCore.pyqtSignal(dict)
+    FILTER_OPTIONS = ["None", "Pass", "Notch"]
 
-    FILTER_OPTIONS = [
-        "None",
-        "Highpass 0.3 Hz",
-        "Notch 50 Hz",
-        "Notch 100 Hz",
-        "Lowpass 70 Hz",
-    ]
+    class FilterRow(QtWidgets.QWidget):
+        changed = QtCore.pyqtSignal()
+        def __init__(self, label_text: str, parent=None):
+            super().__init__(parent)
+            self.type_box = QtWidgets.QComboBox()
+            self.type_box.addItems(ParametersPage.FILTER_OPTIONS)
 
-    def __init__(self, parent=None):
+            # Pass row (Lower/Upper)
+            self.pass_row = QtWidgets.QWidget()
+            pr_layout = QtWidgets.QHBoxLayout(self.pass_row); pr_layout.setContentsMargins(0,0,0,0)
+            self.lower_edit = QtWidgets.QLineEdit(); self.upper_edit = QtWidgets.QLineEdit()
+            self.lower_edit.setPlaceholderText("Lower Hz (optional)")
+            self.upper_edit.setPlaceholderText("Upper Hz (optional)")
+            self.lower_edit.setValidator(QtGui.QDoubleValidator(0.0, 1e6, 3, self))
+            self.upper_edit.setValidator(QtGui.QDoubleValidator(0.0, 1e6, 3, self))
+            pr_layout.addWidget(QtWidgets.QLabel("Lower:")); pr_layout.addWidget(self.lower_edit)
+            pr_layout.addSpacing(8)
+            pr_layout.addWidget(QtWidgets.QLabel("Upper:")); pr_layout.addWidget(self.upper_edit)
+
+            # Notch row (Center)
+            self.notch_row = QtWidgets.QWidget()
+            nr_layout = QtWidgets.QHBoxLayout(self.notch_row); nr_layout.setContentsMargins(0,0,0,0)
+            self.center_edit = QtWidgets.QLineEdit()
+            self.center_edit.setPlaceholderText("Center Hz")
+            self.center_edit.setValidator(QtGui.QDoubleValidator(0.0, 1e6, 3, self))
+            nr_layout.addWidget(QtWidgets.QLabel("Center:")); nr_layout.addWidget(self.center_edit)
+
+            # None row
+            self.none_row = QtWidgets.QWidget()
+            nr = QtWidgets.QHBoxLayout(self.none_row); nr.setContentsMargins(0,0,0,0)
+            nr.addWidget(QtWidgets.QLabel("")); nr.addStretch(1)
+
+            # Layout
+            left = QtWidgets.QVBoxLayout(); left.setContentsMargins(0,0,0,0)
+            left.addWidget(QtWidgets.QLabel(label_text)); left.addWidget(self.type_box)
+            right = QtWidgets.QVBoxLayout(); right.setContentsMargins(0,0,0,0)
+            right.addWidget(self.none_row); right.addWidget(self.pass_row); right.addWidget(self.notch_row)
+            lay = QtWidgets.QHBoxLayout(self); lay.addLayout(left); lay.addSpacing(10); lay.addLayout(right, 1)
+
+            self.type_box.currentTextChanged.connect(self._update_rows)
+            for w in (self.lower_edit, self.upper_edit, self.center_edit):
+                w.textChanged.connect(self.changed.emit)
+            self._update_rows()
+
+        def _update_rows(self):
+            t = self.type_box.currentText()
+            self.none_row.setVisible(t == "None")
+            self.pass_row.setVisible(t == "Pass")
+            self.notch_row.setVisible(t == "Notch")
+            self.changed.emit()
+
+        def value(self) -> dict:
+            def f(le: QtWidgets.QLineEdit):
+                txt = le.text().strip()
+                return float(txt) if txt else None
+            t = self.type_box.currentText()
+            out = {"type": t, "lower": None, "upper": None, "center": None}
+            if t == "Pass":
+                out["lower"], out["upper"] = f(self.lower_edit), f(self.upper_edit)
+            elif t == "Notch":
+                out["center"] = f(self.center_edit)
+            return out
+
+        def validate(self, parent: QtWidgets.QWidget) -> bool:
+            t = self.type_box.currentText()
+            if t == "Pass":
+                lower = self.lower_edit.text().strip()
+                upper = self.upper_edit.text().strip()
+                if not lower and not upper:
+                    QtWidgets.QMessageBox.warning(parent, "Invalid Pass filter",
+                        "Enter at least one of Lower Hz or Upper Hz for a Pass filter.")
+                    return False
+                if lower and upper:
+                    if float(lower) >= float(upper):
+                        QtWidgets.QMessageBox.warning(parent, "Invalid Pass band",
+                            "Lower Hz must be strictly less than Upper Hz.")
+                        return False
+            elif t == "Notch":
+                if not self.center_edit.text().strip():
+                    QtWidgets.QMessageBox.warning(parent, "Invalid Notch filter",
+                        "Center Hz is required for a Notch filter.")
+                    return False
+            return True
+
+    def __init__(self, use_emg: bool, use_eeg: bool, parent=None):
         super().__init__(parent)
+        self.use_emg = use_emg
+        self.use_eeg = use_eeg
 
         title = QtWidgets.QLabel("Experiment Parameters")
         title.setAlignment(QtCore.Qt.AlignCenter)
         title.setStyleSheet("font-size: 20px; font-weight: 600;")
 
-        # Trial number
-        self.trial_edit = QtWidgets.QLineEdit()
-        self.trial_edit.setPlaceholderText("e.g., 1")
+        # Trial / Length
+        self.trial_edit = QtWidgets.QLineEdit(); self.trial_edit.setPlaceholderText("")
+        self.length_edit = QtWidgets.QLineEdit(); self.length_edit.setPlaceholderText("")
+        self.length_edit.setValidator(QtGui.QDoubleValidator(0.001, 1e6, 3, self))
 
-        # Recording length (seconds)
-        self.length_edit = QtWidgets.QLineEdit()
-        self.length_edit.setPlaceholderText("seconds, e.g., 4.0")
+        base_form = QtWidgets.QFormLayout()
+        base_form.addRow("Trial number:", self.trial_edit)
+        base_form.addRow("Recording length (s):", self.length_edit)
+        self.emg_auto_seg = QtWidgets.QCheckBox("Use automatic movement segmentation (EMG)")
+        self.emg_auto_unavailable_label = QtWidgets.QLabel("Automatic segmentation is unavailable for EEG-only trials")
+        self.emg_auto_seg.setChecked(False)
+        self.emg_auto_seg.setVisible(self.use_emg)
+        self.emg_auto_unavailable_label.setVisible(not self.use_emg)
+        base_form.addWidget(self.emg_auto_seg)
+        base_form.addWidget(self.emg_auto_unavailable_label)
 
-        # Filters A/B/C
-        self.filter_a = QtWidgets.QComboBox(); self.filter_a.addItems(self.FILTER_OPTIONS)
-        self.filter_b = QtWidgets.QComboBox(); self.filter_b.addItems(self.FILTER_OPTIONS)
-        self.filter_c = QtWidgets.QComboBox(); self.filter_c.addItems(self.FILTER_OPTIONS)
+        # EMG filters group (only visible if EMG selected)
+        self.emg_group = QtWidgets.QGroupBox("EMG Filters")
+        emg_lay = QtWidgets.QFormLayout(self.emg_group)
+        self.emg_a = ParametersPage.FilterRow("First Filter")
+        self.emg_b = ParametersPage.FilterRow("Second Filter")
+        self.emg_c = ParametersPage.FilterRow("Third Filter")
+        emg_lay.addRow(self.emg_a); emg_lay.addRow(self.emg_b); emg_lay.addRow(self.emg_c)
+        self.emg_group.setVisible(self.use_emg)
 
-        form = QtWidgets.QFormLayout()
-        form.addRow("Trial number:", self.trial_edit)
-        form.addRow("Recording length (s):", self.length_edit)
-        form.addRow("Filter A:", self.filter_a)
-        form.addRow("Filter B:", self.filter_b)
-        form.addRow("Filter C:", self.filter_c)
+        # EEG filters group (only visible if EEG selected)
+        self.eeg_group = QtWidgets.QGroupBox("EEG Filters")
+        eeg_lay = QtWidgets.QFormLayout(self.eeg_group)
+        self.eeg_a = ParametersPage.FilterRow("First Filter")
+        self.eeg_b = ParametersPage.FilterRow("Second Filter")
+        self.eeg_c = ParametersPage.FilterRow("Thrid Filter")
+        eeg_lay.addRow(self.eeg_a); eeg_lay.addRow(self.eeg_b); eeg_lay.addRow(self.eeg_c)
+        self.eeg_group.setVisible(self.use_eeg)
 
+        # Buttons
         btn_row = QtWidgets.QHBoxLayout()
         self.btn_back = QtWidgets.QPushButton("Back")
-        self.btn_next = QtWidgets.QPushButton("Continue")
-        self.btn_next.setDefault(True)
-        btn_row.addStretch(1)
-        btn_row.addWidget(self.btn_back)
-        btn_row.addWidget(self.btn_next)
+        self.btn_next = QtWidgets.QPushButton("Continue"); self.btn_next.setDefault(True)
+        btn_row.addStretch(1); btn_row.addWidget(self.btn_back); btn_row.addWidget(self.btn_next)
 
         layout = QtWidgets.QVBoxLayout(self)
-        layout.addSpacing(12)
-        layout.addWidget(title)
-        layout.addSpacing(8)
-        layout.addLayout(form)
+        layout.addSpacing(12); layout.addWidget(title); layout.addSpacing(8)
+        layout.addLayout(base_form)
+        layout.addWidget(self.emg_group)
+        layout.addWidget(self.eeg_group)
         layout.addStretch(1)
         layout.addLayout(btn_row)
 
         self.btn_next.clicked.connect(self._on_continue)
 
-    def _on_continue(self):
-        # Validate: trial must be int; recording length must be number
-        trial_text = self.trial_edit.text().strip()
-        length_text = self.length_edit.text().strip()
+    def _validate_filter_group(self, rows) -> bool:
+        for r in rows:
+            if not r.validate(self):
+                return False
+        return True
 
+    def _on_continue(self):
+        # Trial
+        t = self.trial_edit.text().strip()
         try:
-            trial_num = int(trial_text)
+            trial_num = int(t)
         except Exception:
             QtWidgets.QMessageBox.warning(self, "Invalid trial number", "Trial number must be an integer.")
             return
 
+        # Length
+        lt = self.length_edit.text().strip()
         try:
-            rec_len = float(length_text)
+            rec_len = float(lt)
         except Exception:
             QtWidgets.QMessageBox.warning(self, "Invalid recording length", "Recording length must be a number (seconds).")
             return
-
         if rec_len <= 0:
             QtWidgets.QMessageBox.warning(self, "Invalid recording length", "Recording length must be > 0.")
             return
 
+        # Validate visible groups
+        if self.use_emg and not self._validate_filter_group((self.emg_a, self.emg_b, self.emg_c)):
+            return
+        if self.use_eeg and not self._validate_filter_group((self.eeg_a, self.eeg_b, self.eeg_c)):
+            return
+
+        filters_struct = {
+            "emg": [self.emg_a.value(), self.emg_b.value(), self.emg_c.value()] if self.use_emg else [],
+            "eeg": [self.eeg_a.value(), self.eeg_b.value(), self.eeg_c.value()] if self.use_eeg else [],
+        }
+
         params = {
             "trial": trial_num,
             "recording_length": rec_len,
-            "filter_a": self.filter_a.currentText(),
-            "filter_b": self.filter_b.currentText(),
-            "filter_c": self.filter_c.currentText(),
+            "filters": filters_struct,
         }
         self.proceed.emit(params)
+
 
 
 class DeviceInitWorker(QtCore.QThread):
@@ -451,18 +572,22 @@ class ExperimentPage(QtWidgets.QWidget):
 
         os.makedirs("data", exist_ok=True)
 
-        # Save for inspection (CSV default; toggle to NPY for speed)
         if SAVE_AS_NPY:
             np.save("data/online_data.npy", data)
             print("[processing] saved trial to data/online_data.npy")
         else:
             if getattr(self.session.config, "USE_EMG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_raw_emg.csv", data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
+                np.savetxt(f"data/trial_{self.params['trial']}_raw_emg.csv",
+                           data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
             if getattr(self.session.config, "USE_EEG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_raw_eeg.csv", data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
+                np.savetxt(f"data/trial_{self.params['trial']}_raw_eeg.csv",
+                           data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
             print("Saved raw trial CSVs.")
 
-        filtered_data = selective_filter([self.params["filter_a"], self.params["filter_b"], self.params["filter_c"]], data)
+        # NEW: pass structured filters; update util.filters.selective_filter to accept this:
+        #   expected format: List[{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}]
+        filtered_data = selective_filter(self.params["filters"], data)
+
         windowed_data = window_data(filtered_data)
         normalised_data = normalise_data(windowed_data)
 
@@ -471,9 +596,11 @@ class ExperimentPage(QtWidgets.QWidget):
             print("[processing] Saved processed to data/processed.npy")
         else:
             if getattr(self.session.config, "USE_EMG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_processed_emg.csv", normalised_data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
+                np.savetxt(f"data/trial_{self.params['trial']}_processed_emg.csv",
+                           normalised_data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
             if getattr(self.session.config, "USE_EEG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_processed_eeg.csv", normalised_data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
+                np.savetxt(f"data/trial_{self.params['trial']}_processed_eeg.csv",
+                           normalised_data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
             print("[processing] saved processed CSVs.")
 
         print("[processing] pipeline completed")
@@ -507,9 +634,8 @@ class MainWindow(QtWidgets.QMainWindow):
     # Flow: DeviceSelect -> Parameters -> Experiment
     def _go_params(self, use_emg: bool, use_eeg: bool):
         self.use_emg, self.use_eeg = use_emg, use_eeg
-        self.page_params = ParametersPage()
+        self.page_params = ParametersPage(use_emg=self.use_emg, use_eeg=self.use_eeg)
         self.page_params.proceed.connect(self._go_experiment)
-        # Optional: allow going back
         self.page_params.btn_back.clicked.connect(lambda: self.stack.setCurrentWidget(self.page_select))
         self.stack.addWidget(self.page_params)
         self.stack.setCurrentWidget(self.page_params)
