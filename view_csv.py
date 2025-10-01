@@ -15,8 +15,8 @@ from config import Config
 matplotlib.use('TkAgg')
 
 
-FILENAME = ""                           # Set your file name here
-SINGLE_CHANNEL_MODE = False
+FILENAME = "data/trial_12_raw_emg.csv"                           # Set your file name here
+SINGLE_CHANNEL_MODE = True
 CHANNEL = 12
 
 START_CHANNEL = 10
@@ -27,7 +27,7 @@ CHANNEL_LIST = []
 
 
 
-AMPLITUDE_IN_MILLIVOLTS = 1               # Only affects multi-channel mode. Adjust as necessary
+AMPLITUDE_IN_MILLIVOLTS = 0.5               # Only affects multi-channel mode. Adjust as necessary
 
 
 MICRO_VOLTS = False

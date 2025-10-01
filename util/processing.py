@@ -8,7 +8,7 @@ ratios, and filtering for EEG signals.
 
 import numpy as np
 from config import Config
-from util.filters import preprocess_eeg
+from util.filter_helpers import preprocess_eeg
 
 
 def process(config, temp, data, tot_num_byte, chan_ready):

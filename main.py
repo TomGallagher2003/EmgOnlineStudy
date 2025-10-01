@@ -9,15 +9,16 @@ import sys
 import random
 from typing import Optional, Dict, Any
 
+import h5py
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from util.filters import selective_filter
+from pipeline_sections.filters import selective_filter
 from util.images import Images
 from recording import Session  # adjust import path if needed
 from util.movement_segmentation import detect_movement_mask
-from util.normalise_data import normalise_data
-from util.windows import window_data
+from pipeline_sections.normalisation import normalise_data
+from pipeline_sections.windows import window_data
 
 # Expecting util.images to expose MOVEMENT_TUPLES = list[(clean_name, filename)]
 MOVEMENTS = Images.MOVEMENT_TUPLES
@@ -252,6 +253,17 @@ class ParametersPage(QtWidgets.QWidget):
         base_form = QtWidgets.QFormLayout()
         base_form.addRow("Trial number:", self.trial_edit)
         base_form.addRow("Recording length (s):", self.length_edit)
+
+        #Pipiline sections
+        self.use_window = QtWidgets.QCheckBox("Window Data")
+        self.use_normalisation = QtWidgets.QCheckBox("Normalise Data")
+        self.use_window.setChecked(True)
+        self.use_window.setVisible(True)
+        self.use_normalisation.setChecked(True)
+        self.use_normalisation.setVisible(True)
+        base_form.addWidget(self.use_window)
+        base_form.addWidget(self.use_normalisation)
+
         self.emg_auto_seg = QtWidgets.QCheckBox("Use automatic movement segmentation (EMG)")
         self.emg_auto_unavailable_label = QtWidgets.QLabel("Automatic segmentation is unavailable for EEG-only trials")
         self.emg_auto_seg.setChecked(False)
@@ -259,6 +271,7 @@ class ParametersPage(QtWidgets.QWidget):
         self.emg_auto_unavailable_label.setVisible(not self.use_emg)
         base_form.addWidget(self.emg_auto_seg)
         base_form.addWidget(self.emg_auto_unavailable_label)
+
 
         # EMG filters group (only visible if EMG selected)
         self.emg_group = QtWidgets.QGroupBox("EMG Filters")
@@ -335,7 +348,9 @@ class ParametersPage(QtWidgets.QWidget):
             "trial": trial_num,
             "recording_length": rec_len,
             "filters": filters_struct,
-            "use_auto": self.emg_auto_seg.isChecked()
+            "use_auto": self.emg_auto_seg.isChecked(),
+            "use_window": self.use_window.isChecked(),
+            "use_normalisation": self.use_normalisation.isChecked()
         }
         self.proceed.emit(params)
 
@@ -372,15 +387,16 @@ class RecordingWorker(QtCore.QThread):
     failed = QtCore.pyqtSignal(str)
     capture_started = QtCore.pyqtSignal()
 
-    def __init__(self, session: Session, parent=None):
+    def __init__(self, session: Session, rec_len: float, parent=None):
         super().__init__(parent)
         self.session = session
+        self.rec_len = rec_len
 
     def run(self):
         try:
             self.capture_started.emit()
             # NOTE: still hard-coded 4.0s capture; we are not yet using the user-set recording length
-            data = self.session.get_record(rec_time=4.0)
+            data = self.session.get_record(rec_time=self.rec_len)
             if data is None or data.size == 0:
                 self.failed.emit("Recording returned no data.")
                 return
@@ -512,8 +528,8 @@ class ExperimentPage(QtWidgets.QWidget):
         self.btn_start.setEnabled(False)
         self.recording_done = False
 
-        self.recording_worker = RecordingWorker(self.session, parent=self)
-        self.recording_worker.capture_started.connect(lambda: self.arc.start(4000))  # start arc on actual capture start
+        self.recording_worker = RecordingWorker(self.session, self.params["recording_length"], parent=self)
+        self.recording_worker.capture_started.connect(lambda: self.arc.start(int(self.params["recording_length"] * 1000)))  # start arc on actual capture start
         self.recording_worker.finished_ok.connect(self._on_recording_finished)
         self.recording_worker.failed.connect(self._on_recording_failed)
         self.recording_worker.start()
@@ -558,13 +574,13 @@ class ExperimentPage(QtWidgets.QWidget):
 
     def _on_classification_done(self):
         self.is_classifying = False
-        self.status_label.setText("Classification complete.")
+        self.status_label.setText("Pipeline complete.")
         self.btn_random.setEnabled(True)
         self.btn_start.setEnabled(self.session is not None and self.current_movement is not None)
 
     def _on_classification_failed(self, msg: str):
         self.is_classifying = False
-        self.status_label.setText(f"Classification error: {msg}")
+        self.status_label.setText(f"Pipeline error: {msg}")
         self.btn_random.setEnabled(True)
         self.btn_start.setEnabled(self.session is not None and self.current_movement is not None)
 
@@ -574,9 +590,13 @@ class ExperimentPage(QtWidgets.QWidget):
 
         os.makedirs("data", exist_ok=True)
 
+        emg_data = data[self.session.config.MUOVI_EMG_CHANNELS] if getattr(self.session.config, "USE_EMG", False) else None
+        eeg_data = data[self.session.config.MUOVI_PLUS_EEG_CHANNELS] if getattr(self.session.config, "USE_EEG", False) else None
 
-        label = detect_movement_mask(data) if self.params["use_auto"] else np.ones(data.shape[1]) * self.current_movement
+        label = detect_movement_mask(emg_data) if self.params["use_auto"] else np.ones(data.shape[1]) * self.current_movement
         label_type = "auto" if self.params["use_auto"] else "basic"
+
+
 
         if SAVE_AS_NPY:
             np.save("data/online_data.npy", data)
@@ -586,28 +606,46 @@ class ExperimentPage(QtWidgets.QWidget):
                        label.transpose(), delimiter=",")
             if getattr(self.session.config, "USE_EMG", False):
                 np.savetxt(f"data/trial_{self.params['trial']}_raw_emg.csv",
-                           data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
+                           emg_data.transpose(), delimiter=",")
+
+                # Ensure shape (samples, channels)
+                if emg_data.shape[0] < emg_data.shape[1]:
+                    emg_data = emg_data.T
+
+                filtered = selective_filter(self.params["filters"]["emg"], emg_data)
+                normalised = normalise_data(filtered) if self.params["use_normalisation"] else filtered
+
+                if self.params["use_window"]:
+                    windowed = window_data(normalised)
+                    if windowed.shape[0] == 0:  # No windows fit
+                        print("Warning: no EMG windows created (recording shorter than window_size).")
+                    save_data = windowed
+                else:
+                    save_data = normalised
+
+                with h5py.File(f"data/trial_{self.params['trial']}_processed_emg.h5", "w") as f:
+                    f.create_dataset("windowed_data", data=save_data)
+
             if getattr(self.session.config, "USE_EEG", False):
                 np.savetxt(f"data/trial_{self.params['trial']}_raw_eeg.csv",
-                           data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
-            print("Saved raw trial CSVs.")
+                           eeg_data.transpose(), delimiter=",")
 
+                if eeg_data.shape[0] < eeg_data.shape[1]:
+                    eeg_data = eeg_data.T
 
-        filtered_data = selective_filter(self.params["filters"], data)
-        windowed_data = window_data(filtered_data)
-        normalised_data = normalise_data(windowed_data)
+                filtered = selective_filter(self.params["filters"]["eeg"], eeg_data)
+                normalised = normalise_data(filtered) if self.params["use_normalisation"] else filtered
 
-        if SAVE_AS_NPY:
-            np.save("data/processed.npy", normalised_data)
-            print("[processing] Saved processed to data/processed.npy")
-        else:
-            if getattr(self.session.config, "USE_EMG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_processed_emg.csv",
-                           normalised_data[self.session.config.MUOVI_EMG_CHANNELS].transpose(), delimiter=",")
-            if getattr(self.session.config, "USE_EEG", False):
-                np.savetxt(f"data/trial_{self.params['trial']}_processed_eeg.csv",
-                           normalised_data[self.session.config.MUOVI_PLUS_EEG_CHANNELS].transpose(), delimiter=",")
-            print("[processing] saved processed CSVs.")
+                if self.params["use_window"]:
+                    windowed = window_data(normalised)
+                    if windowed.shape[0] == 0:
+                        print("Warning: no EEG windows created (recording shorter than window_size).")
+                    save_data = windowed
+                else:
+                    save_data = normalised
+
+                with h5py.File(f"data/trial_{self.params['trial']}_processed_eeg.h5", "w") as f:
+                    f.create_dataset("windowed_data", data=save_data)
 
         print("[processing] pipeline completed")
 

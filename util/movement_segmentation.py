@@ -50,7 +50,7 @@ class SegmentationParams:
 
 def detect_movement_mask(
     emg: np.ndarray,
-    fs: float,
+    fs: float = 2000,
     channels: Optional[Iterable[int]] = None,
     params: Optional[SegmentationParams] = None,
     single_segment: bool = False,
