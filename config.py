@@ -74,6 +74,9 @@ class Config:
         self.SAVE_COUNTERS = True
         self.SAVE_H5 = True
 
+        self.EMG_FS = 2000
+        self.EEG_FS = 500
+
         # Set the Gain Mode here : 0 -> 8, 1 -> 4
         self.EMG_MODE = 0
         self.EEG_MODE = 0

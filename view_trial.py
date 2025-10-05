@@ -12,10 +12,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 from config import Config
+
 matplotlib.use('TkAgg')
+TRIAL = 8
 
-
-FILENAME = "data/trial_87_raw_emg.csv"                           # Set your file name here
+FILENAME = f"data/trial_{TRIAL}_raw_emg.csv"
+LABEL_FILENAME = f"data/trial_{TRIAL}_auto_label.csv"
 SINGLE_CHANNEL_MODE = True
 CHANNEL = 12
 
@@ -24,15 +26,12 @@ NUM_CHANNELS = 5
 
 CHANNEL_LIST = []
 
-
-
-
-AMPLITUDE_IN_MILLIVOLTS = 0.5               # Only affects multi-channel mode. Adjust as necessary
-
+AMPLITUDE_IN_MILLIVOLTS = 0.5  # Only affects multi-channel mode. Adjust as necessary
 
 MICRO_VOLTS = False
 if FILENAME.split("\\")[-1].startswith("eeg"):
     MICRO_VOLTS = True
+
 
 def plot_file(file_path, channel_list=[]):
     """Plot multiple channels from a CSV signal file in stacked subplots.
@@ -54,19 +53,16 @@ Notes:
       (interpreted as mV or µV depending on mode).
 """
 
-
     data = np.loadtxt(file_path, delimiter=',')
     data = data.transpose()
     if len(channel_list) > 0:
         data = data[channel_list]
-
 
     amplitude = AMPLITUDE_IN_MILLIVOLTS
     if MICRO_VOLTS:
         data = data * 1e3
         amplitude = amplitude * 1e3
     print(data.shape)
-
 
     plt.clf()
     fig, axes = plt.subplots(nrows=data.shape[0], ncols=1, figsize=(16, 16), sharex=True)
@@ -79,9 +75,9 @@ Notes:
         axes[j].set_xticks([])
         axes[j].plot(emg_signal, label=f'Channel {j + 1}')
 
-
-
     plt.show()
+
+
 def plot_channel(file_path, channel=1):
     """Plot a single channel from a CSV signal file.
 
@@ -100,27 +96,50 @@ Notes:
       if raw counts vs. calibrated units differ.
 """
 
-
     data = np.loadtxt(file_path, delimiter=',')
     data = data.transpose()
+    label = np.loadtxt(LABEL_FILENAME, delimiter=',')
+
     unit_label = "mV"
     if max([max(x) for x in data[5:20]]) > 500:
         unit_label = "raw input"
     elif MICRO_VOLTS:
         data = data * 1e3
         unit_label = "µV"
-    
-    
 
     plt.clf()
     plt.figure(figsize=(15, 5))
     plt.ylabel(unit_label)
+    plt.fill_between(np.arange(len(label)), min(data[channel-1]), max(data[channel-1]), where=[l!=0 for l in label], interpolate=True, alpha=0.3)
 
-    plt.plot(data[channel-1])
-
-
-
+    plt.plot(data[channel - 1])
     plt.show()
+import numpy as np
+
+def mask_to_segments(mask: np.ndarray):
+    """
+    Convert a 1D binary mask into start/end index pairs
+    for contiguous non-zero regions.
+
+    Args:
+        mask: 1D array-like of 0/1 values
+
+    Returns:
+        List of (start, end) index tuples (end is inclusive)
+    """
+    mask = np.asarray(mask, dtype=bool)
+    # Find rising and falling edges
+    diff = np.diff(mask.astype(int))
+    starts = np.where(diff == 1)[0] + 1
+    ends   = np.where(diff == -1)[0]
+
+    # Handle edge cases if mask starts/ends inside a region
+    if mask[0]:
+        starts = np.r_[0, starts]
+    if mask[-1]:
+        ends = np.r_[ends, len(mask) - 1]
+
+    return list(zip(starts, ends))
 
 
 # Entry point: selects plotting mode based on flags/args and renders the figure.
@@ -129,7 +148,7 @@ if __name__ == '__main__':
     if SINGLE_CHANNEL_MODE:
         plot_channel(FILENAME, CHANNEL)
     elif len(CHANNEL_LIST) > 0:
-        plot_file(FILENAME,  CHANNEL_LIST)
+        plot_file(FILENAME, CHANNEL_LIST)
     elif START_CHANNEL and NUM_CHANNELS:
         plot_file(FILENAME, range(START_CHANNEL, START_CHANNEL + NUM_CHANNELS))
     else:

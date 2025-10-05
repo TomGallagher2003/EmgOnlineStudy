@@ -113,6 +113,7 @@ class Session:
             rep (int): Repetition number (used for file naming).
         """
         print(f"Recording for movement {movement} rep {rep} ({perform_time + rest_time} seconds)")
+
         self.record(True, rest_time, movement, perform_time=perform_time, rep=rep)
     def record_initial_rest(self, rest_time, movement, perform_time):
         """Record the initial rest period before a movement.
@@ -143,6 +144,8 @@ class Session:
             - Uses `SAMPLE_TOLERANCE` to accept minor sample count drift.
             - Uses `simple_alignment` when EEG is not enabled; otherwise no offset trim here.
         """
+        if self.socket_handler:
+            self.socket_handler.flush(100)
         if is_movement: rec_time = perform_time + rest_time
         else: rec_time = rest_time
 
@@ -223,7 +226,7 @@ class Session:
             time.sleep(0.05)
         while time.time() < end_time:
             if not self.recording:
-                data = self.socket_handler.receive(1024)
+                data = self.socket_handler.receive(self.tot_num_byte * 10)
                 if not data:
                     break
 
@@ -287,7 +290,7 @@ class Session:
             date_str=self.dateString
         )
 
-    def get_record(self, rec_time):
+    def get_record(self, rec_time, flush=True):
         """Capture a raw segment for `rec_time` seconds and return decoded channels. Used to make sure there is nonzero data for each device.
 
                Streams bytes for the specified duration, aligns frames (EEG-aware if
@@ -299,21 +302,11 @@ class Session:
                Returns:
                    np.ndarray: Array of shape [n_channels, n_samples] for the captured segment.
                """
-
-        data_buffer = b""
-        chunk_size = self.tot_num_byte * 10
-        start_time = time.time()
-        self.recording = True
-
-        while time.time() - start_time < rec_time:
-            data_temp = self.socket_handler.receive(chunk_size)
-            if not data_temp:
-                break
-            data_buffer += data_temp
+        if self.socket_handler and flush:
+            self.socket_handler.flush(100)
 
         total_samples = int(self.config.SAMPLE_FREQUENCY * rec_time)
         expected_bytes = self.tot_num_byte * total_samples
-        data = np.zeros((self.tot_num_chan, int(self.config.SAMPLE_FREQUENCY * rec_time)))
 
         chan_ready = 0
         data_buffer = b""  # Buffer to store the received data
@@ -328,12 +321,6 @@ class Session:
                 break
             data_buffer += data_temp
         self.recording = False
-        if not self.config.USE_EEG:
-            offset = simple_alignment(data_buffer)
-        else:
-            offset = 0
-        if offset != 0:
-            data_buffer = data_buffer[:-offset]
         sample_size = self.tot_num_byte
         remainder = len(data_buffer) % sample_size
         if remainder != 0:
