@@ -15,7 +15,7 @@ from config import Config
 matplotlib.use('TkAgg')
 
 
-FILENAME = "data/trial_87_raw_emg.csv"                           # Set your file name here
+FILENAME = "data/trial_8_raw_emg.csv"                           # Set your file name here
 SINGLE_CHANNEL_MODE = True
 CHANNEL = 12
 
@@ -127,10 +127,10 @@ Notes:
 if __name__ == '__main__':
 
     if SINGLE_CHANNEL_MODE:
-        plot_channel(FILENAME, CHANNEL)
+        plot_channel("../" + FILENAME, CHANNEL)
     elif len(CHANNEL_LIST) > 0:
-        plot_file(FILENAME,  CHANNEL_LIST)
+        plot_file("../" + FILENAME,  CHANNEL_LIST)
     elif START_CHANNEL and NUM_CHANNELS:
-        plot_file(FILENAME, range(START_CHANNEL, START_CHANNEL + NUM_CHANNELS))
+        plot_file("../" + FILENAME, range(START_CHANNEL, START_CHANNEL + NUM_CHANNELS))
     else:
-        plot_file(FILENAME)
+        plot_file("../" + FILENAME)
