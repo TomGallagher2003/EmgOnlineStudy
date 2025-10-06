@@ -11,7 +11,7 @@ Default sampling frequency is 500 Hz.
 from scipy.signal import butter, filtfilt
 import numpy as np
 
-FS = 500.0  # sampling frequency (Hz)
+FS = 2000.0  # sampling frequency (Hz)
 
 
 def highpass_filter(data: np.ndarray, cutoff: float = 0.1, order: int = 4, fs: float = FS) -> np.ndarray:
