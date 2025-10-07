@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from pipeline_sections.filters import selective_filter
 from pipeline_sections.normalisation import normalise_data
 from pipeline_sections.reduce_eeg_samples import reduce_eeg
-from pipeline_sections.windows import window_data
+from pipeline_sections.windows import window_data, window_labels
 from util.images import Images
 from util.mask_to_segments import mask_to_segments
 from util.movement_segmentation import detect_movement_mask
@@ -399,7 +399,6 @@ class ExperimentPage(QtWidgets.QWidget):
         else:
             label = np.full(data.shape[1], movement_id, dtype=float)
             label_type = "basic"
-
         processed_emg_all = None
         processed_emg_inlabel = None
 
@@ -426,6 +425,7 @@ class ExperimentPage(QtWidgets.QWidget):
                 win_emg = self._ms_to_samples(self.params["window_ms"], fs_emg)
                 ov_emg = self._ms_to_samples(self.params["overlap_ms"], fs_emg)
                 ov_emg = min(ov_emg, max(0, win_emg - 1))  # enforce 0 <= overlap < window
+                win_labels = window_labels(label, sample_size=win_emg, step_size=ov_emg, reduce="mode")
 
                 # --- FULL EMG: filter -> normalise -> window
                 filtered_all = selective_filter(self.params["filters"]["emg"], emg_data)
@@ -465,8 +465,8 @@ class ExperimentPage(QtWidgets.QWidget):
                 with h5py.File(f"data/trial_{self.params['trial']}_processed_emg.h5", "w") as f:
                     if processed_emg_all is not None:
                         f.create_dataset("windowed_data", data=processed_emg_all)
-                    if processed_emg_inlabel is not None:
-                        f.create_dataset("windowed_data_inlabel", data=processed_emg_inlabel)
+                    if win_labels is not None:
+                        f.create_dataset("labels", data=win_labels)
 
             # ---- EEG branch ----------------------------------------------------
             if getattr(self.session.config, "USE_EEG", False) and eeg_data is not None:
