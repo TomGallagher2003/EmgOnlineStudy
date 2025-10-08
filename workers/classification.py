@@ -58,7 +58,7 @@ class ClassificationWorker(QtCore.QThread):
             # Take the first run's predictions and compute a simple majority vote
             first = results[0]
             preds = np.asarray(first.get("preds", []))
-            print(preds)
+            print("predicitions->", preds)
             if preds.size == 0:
                 self.finished_ok.emit(("", 0.0))
                 return

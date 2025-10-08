@@ -60,7 +60,7 @@ def plot_confusion_matrix(true_labels, predicted_labels, num_classes, path=None)
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title('Confusion Matrix')
-    path = path if path is not None else r'.\confusion_matrix_figure.png'
+    path = path if path is not None else r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\confusion_matrix_figure.png'
     plt.savefig(path)
 
 
@@ -119,12 +119,12 @@ if __name__ == "__main__":
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered"
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered_reduced"
         folder_path1 = r'D:\Data\Jeff_data\EMG_data\formal\mix\hdf5'
-        folder_path1 = r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\trial_2\rec_7'
+        folder_path1 = r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\trial_7\rec_1'
 
         sample_size = 512
 
 
-        data1, labels1 = process_h5_files(folder_path1, sample_size=sample_size, max_zero_samples=400)
+        data1, labels1 = process_h5_files(folder_path1, sample_size=sample_size, max_zero_samples=40000, inclusion_phrase="raw_emg")
 
 
         # movement_to_remove1:list=[0,1,4,5,8,9,11,12,16]
@@ -163,6 +163,8 @@ if __name__ == "__main__":
         model = torch.load(r"C:\Users\tom03\PycharmProjects\EmgOnlineStudy\pipeline_sections\models\model.pth", weights_only=False)
         model.to(device)  # to correct device（CPU or GPU）
         _,preds, labels = evaluate_model(model, val_loader, device)
+        print(preds)
+        print(labels)
         report=classification_report(labels, preds, digits=4)
 
         # Plot confusion matrix

@@ -344,10 +344,10 @@ class ExperimentPage(QtWidgets.QWidget):
 
             true_id = self.params.get("movement_id", "N/A")
             if A == "":
-                self.results_label.setText("In-label segment: no windows available for classification")
+                self.results_label.setText("No windows available for classification")
             else:
                 self.results_label.setText(
-                    f"True class {true_id} | In-label prediction: Class {A}, at {fmt_conf(B)} confidence"
+                    f"True class {true_id} | Prediction: Class {A}, at {fmt_conf(B)} confidence"
                 )
         except Exception:
             self.results_label.setText("Classification Results:")
