@@ -60,7 +60,7 @@ def plot_confusion_matrix(true_labels, predicted_labels, num_classes, path=None)
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title('Confusion Matrix')
-    path = path if path is not None else r'data\classification_outputs\confusion_matrix_figure.png'
+    path = path if path is not None else r'.\confusion_matrix_figure.png'
     plt.savefig(path)
 
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered"
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered_reduced"
         folder_path1 = r'D:\Data\Jeff_data\EMG_data\formal\mix\hdf5'
-        folder_path1 = r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\trial_1\rec_1'
+        folder_path1 = r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\trial_2\rec_7'
 
         sample_size = 512
 
@@ -166,8 +166,8 @@ if __name__ == "__main__":
         report=classification_report(labels, preds, digits=4)
 
         # Plot confusion matrix
-        plot_confusion_matrix(labels, preds, num_classes,i)
+        plot_confusion_matrix(labels, preds, num_classes,None)
 
-        with open(r"C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\classification_outputs\classification_report.txt", "w") as f:
+        with open(r"C:\Users\tom03\PycharmProjects\EmgOnlineStudy\classification_report.txt", "w") as f:
             f.write(report)
 

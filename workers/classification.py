@@ -22,7 +22,7 @@ class ClassificationWorker(QtCore.QThread):
         *,
         sample_size: int = 512,
         batch_size: int = 512,
-        num_classes: int = 18,
+        num_classes: int = 30,
         repeats: int = 1,
         parent=None,
     ):
