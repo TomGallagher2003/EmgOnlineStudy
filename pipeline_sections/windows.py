@@ -1,6 +1,6 @@
 import numpy as np
 
-def window_data(data: np.ndarray, sample_size: int = 512, step_size: int = 512) -> np.ndarray:
+def window_data(data: np.ndarray, sample_size: int = 512, overlap: int = 0) -> np.ndarray:
     """
     Slice data into fixed-length windows using a sliding window.
 
@@ -12,6 +12,7 @@ def window_data(data: np.ndarray, sample_size: int = 512, step_size: int = 512) 
     Returns:
         windows: (n_windows, sample_size, n_channels) array
     """
+    step_size = sample_size - overlap
     segments = []
     n_samples, _ = data.shape
 
@@ -23,7 +24,7 @@ def window_data(data: np.ndarray, sample_size: int = 512, step_size: int = 512) 
 
     return np.stack(segments) if segments else np.empty((0, sample_size, data.shape[1]))
 
-def window_labels(labels: np.ndarray, sample_size: int = 512, step_size: int = 512) -> np.ndarray:
+def window_labels(labels: np.ndarray, sample_size: int = 512, overlap: int = 0) -> np.ndarray:
     """
     Slice a 1D label array into fixed-length windows.
 
@@ -35,6 +36,7 @@ def window_labels(labels: np.ndarray, sample_size: int = 512, step_size: int = 5
     Returns:
         windows: (n_windows, sample_size) array of label windows
     """
+    step_size = sample_size - overlap
     labels = np.asarray(labels)
     segments = []
     n_samples = labels.shape[0]

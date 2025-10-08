@@ -425,7 +425,7 @@ class ExperimentPage(QtWidgets.QWidget):
                 win_emg = self._ms_to_samples(self.params["window_ms"], fs_emg)
                 ov_emg = self._ms_to_samples(self.params["overlap_ms"], fs_emg)
                 ov_emg = min(ov_emg, max(0, win_emg - 1))  # enforce 0 <= overlap < window
-                win_labels = window_labels(label, sample_size=win_emg, step_size=ov_emg, reduce="mode")
+                win_labels = window_labels(label, sample_size=win_emg, overlap=ov_emg, reduce="mode")
 
                 # --- FULL EMG: filter -> normalise -> window
                 filtered_all = selective_filter(self.params["filters"]["emg"], emg_data)

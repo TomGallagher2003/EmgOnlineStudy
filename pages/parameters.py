@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-DEFAULT_WINDOW_MS = 256.0
+from emg_default_settings import (DEFAULT_WINDOW_MS, DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ,
+                                  DEFAULT_RECORDING_LENGTH_S, DEFAULT_OVERLAP_MS, DEFAULT_NOTCH_HZ)
 
 
 class ParametersPage(QtWidgets.QWidget):
@@ -93,6 +94,28 @@ class ParametersPage(QtWidgets.QWidget):
                     return False
             return True
 
+        # --- Minimal setters to allow programmatic defaults ---
+        def set_type(self, t: str):
+            if t in ParametersPage.FILTER_OPTIONS:
+                self.type_box.setCurrentText(t)
+                self._update_rows()
+
+        def set_pass(self, lower: float = None, upper: float = None):
+            self.set_type("Pass")
+            self.lower_edit.setText("" if lower is None else str(lower))
+            self.upper_edit.setText("" if upper is None else str(upper))
+
+        def set_notch(self, center: float = None):
+            self.set_type("Notch")
+            self.center_edit.setText("" if center is None else str(center))
+
+        def set_none(self):
+            self.set_type("None")
+            # Clear any lingering values
+            self.lower_edit.clear()
+            self.upper_edit.clear()
+            self.center_edit.clear()
+
     def __init__(self, use_emg: bool, use_eeg: bool, parent=None):
         super().__init__(parent)
         self.use_emg = use_emg
@@ -165,7 +188,21 @@ class ParametersPage(QtWidgets.QWidget):
         self.emg_b = ParametersPage.FilterRow("Second Filter")
         self.emg_c = ParametersPage.FilterRow("Third Filter")
         emg_lay.addRow(self.emg_a); emg_lay.addRow(self.emg_b); emg_lay.addRow(self.emg_c)
+
+        # --- New: Apply EMG Defaults button (visible only if EMG is in use) ---
+        self.btn_apply_emg_defaults = QtWidgets.QPushButton("Apply EMG Defaults")
+        self.btn_apply_emg_defaults.setToolTip(
+            "Set overlap, EMG filters (Pass + Notch), auto-segmentation, and recording length to defaults."
+        )
+        self.btn_apply_emg_defaults.clicked.connect(self._apply_emg_defaults)
+        # put button aligned right in the EMG group
+        emg_btn_row = QtWidgets.QHBoxLayout()
+        emg_btn_row.addStretch(1)
+        emg_btn_row.addWidget(self.btn_apply_emg_defaults)
+        emg_lay.addRow(emg_btn_row)
+
         self.emg_group.setVisible(self.use_emg)
+        self.btn_apply_emg_defaults.setVisible(self.use_emg)
 
         # EEG filters group (only visible if EEG selected)
         self.eeg_group = QtWidgets.QGroupBox("EEG Filters")
@@ -205,6 +242,30 @@ class ParametersPage(QtWidgets.QWidget):
             if not r.validate(self):
                 return False
         return True
+
+    def _apply_emg_defaults(self):
+        """
+        Apply EMG defaults:
+          - Overlap (ms)       -> DEFAULT_OVERLAP_MS
+          - EMG First Filter   -> Pass [DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ]
+          - EMG Second Filter  -> Notch @ DEFAULT_NOTCH_HZ
+          - EMG Third Filter   -> None
+          - Auto segmentation  -> True
+          - Recording length   -> DEFAULT_RECORDING_LENGTH_S
+        """
+        # Overlap
+        self.overlap_ms_edit.setText(str(DEFAULT_OVERLAP_MS))
+
+        # Filters
+        self.emg_a.set_pass(lower=DEFAULT_LOWER_HZ, upper=DEFAULT_UPPER_HZ)
+        self.emg_b.set_notch(center=DEFAULT_NOTCH_HZ)
+        self.emg_c.set_none()
+
+        # Auto-segmentation
+        self.emg_auto_seg.setChecked(True)
+
+        # Recording length
+        self.length_edit.setText(str(DEFAULT_RECORDING_LENGTH_S))
 
     def _on_continue(self):
         # Trial
@@ -278,4 +339,3 @@ class ParametersPage(QtWidgets.QWidget):
             "use_normalisation": self.use_normalisation.isChecked()
         }
         self.proceed.emit(params)
-
