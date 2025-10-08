@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from emg_default_settings import (DEFAULT_WINDOW_MS, DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ,
-                                  DEFAULT_RECORDING_LENGTH_S, DEFAULT_OVERLAP_MS, DEFAULT_NOTCH_HZ)
+                                  DEFAULT_RECORDING_LENGTH_S, DEFAULT_OVERLAP_MS, DEFAULT_NOTCH_HZ,
+                                  DEFAULT_USE_AUTO_SEGMENTATION, DEFAULT_APPLY_NORMALISATION)
 
 
 class ParametersPage(QtWidgets.QWidget):
@@ -163,7 +164,7 @@ class ParametersPage(QtWidgets.QWidget):
         # Overlap (ms) still available (visible)
         self.overlap_ms_edit = QtWidgets.QLineEdit()
         self.overlap_ms_edit.setValidator(QtGui.QDoubleValidator(0.0, 1e9, 3, self))
-        self.overlap_ms_edit.setPlaceholderText("e.g., 128")
+        self.overlap_ms_edit.setPlaceholderText("")
         base_form.addRow(window_row)
         base_form.addRow(self.custom_row)
         base_form.addRow("Overlap (ms):", self.overlap_ms_edit)
@@ -250,7 +251,7 @@ class ParametersPage(QtWidgets.QWidget):
           - EMG First Filter   -> Pass [DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ]
           - EMG Second Filter  -> Notch @ DEFAULT_NOTCH_HZ
           - EMG Third Filter   -> None
-          - Auto segmentation  -> True
+          - Auto segmentation  -> DEFAULT_USE_AUTO_SEGMENTATION
           - Recording length   -> DEFAULT_RECORDING_LENGTH_S
         """
         # Overlap
@@ -262,7 +263,8 @@ class ParametersPage(QtWidgets.QWidget):
         self.emg_c.set_none()
 
         # Auto-segmentation
-        self.emg_auto_seg.setChecked(True)
+        self.emg_auto_seg.setChecked(DEFAULT_USE_AUTO_SEGMENTATION)
+        self.use_normalisation.setChecked(DEFAULT_APPLY_NORMALISATION)
 
         # Recording length
         self.length_edit.setText(str(DEFAULT_RECORDING_LENGTH_S))
