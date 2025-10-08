@@ -21,6 +21,9 @@ from workers.device_init import DeviceInitWorker
 from workers.flush import FlushWorker
 from workers.pipeline import PipelineWorker
 from workers.recording import RecordingWorker
+from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
+from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
+
 
 MOVEMENTS = Images.MOVEMENT_TUPLES
 
@@ -46,6 +49,9 @@ class ExperimentPage(QtWidgets.QWidget):
         self.recording_done = False  # track when recording thread is actually done
         self._current_pixmap_path = None
         self._flusher: Optional[FlushWorker] = None
+
+        # NEW: remember the current recording directory for this trial
+        self._current_rec_dir: Optional[str] = None
 
         # UI - make image large
         self.image_label = QtWidgets.QLabel()
@@ -96,11 +102,41 @@ class ExperimentPage(QtWidgets.QWidget):
 
         self.images_root = pathlib.Path(__file__).resolve().parents[1]
 
+        # NEW: default model/report paths (override if needed via params)
+        self.project_root = self.images_root
+        self.model_path = str(self.project_root / "pipeline_sections" / "models" / "model.pth")
+
         # Kick off device init immediately
         self._init_worker = DeviceInitWorker(self.use_emg, self.use_eeg, parent=self)
         self._init_worker.ready.connect(self._on_devices_ready)
         self._init_worker.failed.connect(self._on_devices_failed)
         self._init_worker.start()
+
+    # --------------------- NEW: per-trial, incrementing recording folders ---------------------
+    def _prepare_recording_dir(self, trial_num: int) -> str:
+        """
+        Create and return a unique recording directory for this trial:
+            data/trial_<trial_num>/rec_<N>/
+        where N starts at 1 and increments for each new recording in that trial.
+        """
+        base_dir = os.path.join("data", f"trial_{trial_num}")
+        os.makedirs(base_dir, exist_ok=True)
+
+        # find existing rec_* dirs and pick next N
+        existing = []
+        for name in os.listdir(base_dir):
+            if name.startswith("rec_"):
+                try:
+                    existing.append(int(name.split("_", 1)[1]))
+                except Exception:
+                    pass
+        next_n = (max(existing) + 1) if existing else 1
+
+        rec_dir = os.path.join(base_dir, f"rec_{next_n}")
+        os.makedirs(rec_dir, exist_ok=False)
+        print(f"[save] trial {trial_num} -> {rec_dir}")
+        return rec_dir
+    # ------------------------------------------------------------------------------------------
 
     # scale image on resize
     def resizeEvent(self, event):
@@ -201,7 +237,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self.recording_done = False
         # Reset results panel for the new attempt (only if EMG path is visible)
         if self.use_emg:
-            self.results_label.setText("Classification Results: placeholder")
+            self.results_label.setText("Classification Results:")
 
         self.recording_worker = RecordingWorker(self.session, self.params["recording_length"], parent=self)
         # start arc on actual capture start; duration follows user-set recording length
@@ -262,13 +298,28 @@ class ExperimentPage(QtWidgets.QWidget):
             self.btn_start.setEnabled(self.session is not None and self.current_movement is not None)
             return
 
-        _, processed_emg_inlabel = processed_tuple  # classify IN-LABEL ONLY
+        _, processed_emg_inlabel = processed_tuple  # classify IN-LABEL ONLY (kept for shape checks if needed)
 
-        # Start CLASSIFICATION step with in-label windows only
+        # Start CLASSIFICATION step using saved H5 in the current recording dir
         self.is_classifying = True
         self.status_label.setText("Classifying...")
 
-        self._classification_worker = ClassificationWorker(processed_emg_inlabel, parent=self)
+        # Construct worker with paths (folder/model/report)
+        # sample_size should match the windowing used for EMG
+        fs_emg = self._get_fs("emg")
+        sample_size = self._ms_to_samples(self.params["window_ms"], fs_emg)
+        report_path = os.path.join(self._current_rec_dir, "classification_report.txt")
+
+        self._classification_worker = ClassificationWorker(
+            folder_path=self._current_rec_dir or "",
+            model_path=self.model_path,
+            report_save_path=report_path,
+            sample_size=sample_size,
+            batch_size=512,
+            num_classes=18,
+            repeats=1,
+            parent=self
+        )
         self._classification_worker.finished_ok.connect(self._on_classification_done)
         self._classification_worker.failed.connect(self._on_classification_failed)
         self._classification_worker.start()
@@ -299,7 +350,7 @@ class ExperimentPage(QtWidgets.QWidget):
                     f"True class {true_id} | In-label prediction: Class {A}, at {fmt_conf(B)} confidence"
                 )
         except Exception:
-            self.results_label.setText("Classification Results: placeholder")
+            self.results_label.setText("Classification Results:")
 
         self.status_label.setText("Classification complete.")
         self.btn_random.setEnabled(True)
@@ -382,7 +433,12 @@ class ExperimentPage(QtWidgets.QWidget):
         print(f"[processing] movement: {movement_name}")
         print(f"[processing] data shape: {getattr(data, 'shape', None)}")
 
+        # --------- pick unique recording directory for this trial ---------
         os.makedirs("data", exist_ok=True)
+        trial_num = int(self.params.get("trial", 0))
+        rec_dir = self._prepare_recording_dir(trial_num)
+        self._current_rec_dir = rec_dir  # remember for classification worker
+        # ------------------------------------------------------------------
 
         emg_data = data[self.session.config.MUOVI_EMG_CHANNELS] if getattr(self.session.config, "USE_EMG",
                                                                            False) else None
@@ -394,28 +450,33 @@ class ExperimentPage(QtWidgets.QWidget):
 
         # Build label vector (samples-long) with the movement_id, or use auto segmentation if EMG is present and enabled
         if self.params["use_auto"] and emg_data is not None:
-            label = detect_movement_mask(emg_data)
-            label_type = "auto"
+            label = detect_movement_mask(emg_data) * movement_id
         else:
             label = np.full(data.shape[1], movement_id, dtype=float)
-            label_type = "basic"
         processed_emg_all = None
         processed_emg_inlabel = None
 
         if SAVE_AS_NPY:
-            np.save("data/online_data.npy", data)
-            print("[processing] saved trial to data/online_data.npy")
+            np.save(os.path.join(rec_dir, "online_data.npy"), data)
+            print(f"[processing] saved trial to {os.path.join(rec_dir, 'online_data.npy')}")
         else:
             np.savetxt(
-                f"data/trial_{self.params['trial']}_{label_type}_label.csv",
+                os.path.join(rec_dir, "label.csv"),
                 label.reshape(-1, 1), delimiter=","
             )
 
             # ---- EMG branch ----------------------------------------------------
             if getattr(self.session.config, "USE_EMG", False) and emg_data is not None:
                 # emg_data is channels x samples; save raw then ensure (samples, channels)
-                np.savetxt(f"data/trial_{self.params['trial']}_raw_emg.csv",
+                np.savetxt(os.path.join(rec_dir, "raw_emg.csv"),
                            emg_data.transpose(), delimiter=",")
+
+                with h5py.File(os.path.join(rec_dir, "raw_emg.h5"), "w") as f:
+                    if emg_data is not None:
+                        f.create_dataset("emg", data=emg_data.transpose())
+                    if label is not None:
+                        f.create_dataset("label", data=label)
+
                 # Ensure shape (samples, channels)
                 if emg_data.shape[0] < emg_data.shape[1]:
                     emg_data = emg_data.T  # now (samples, channels)
@@ -425,7 +486,7 @@ class ExperimentPage(QtWidgets.QWidget):
                 win_emg = self._ms_to_samples(self.params["window_ms"], fs_emg)
                 ov_emg = self._ms_to_samples(self.params["overlap_ms"], fs_emg)
                 ov_emg = min(ov_emg, max(0, win_emg - 1))  # enforce 0 <= overlap < window
-                win_labels = window_labels(label, sample_size=win_emg, overlap=ov_emg, reduce="mode")
+                win_labels = window_labels(label, sample_size=win_emg, overlap=ov_emg)
 
                 # --- FULL EMG: filter -> normalise -> window
                 filtered_all = selective_filter(self.params["filters"]["emg"], emg_data)
@@ -462,15 +523,15 @@ class ExperimentPage(QtWidgets.QWidget):
                     processed_emg_inlabel = np.empty((0, win_emg, emg_data.shape[1]))
 
                 # Save both sets
-                with h5py.File(f"data/trial_{self.params['trial']}_processed_emg.h5", "w") as f:
+                with h5py.File(os.path.join(rec_dir, "processed_emg.h5"), "w") as f:
                     if processed_emg_all is not None:
-                        f.create_dataset("windowed_data", data=processed_emg_all)
+                        f.create_dataset("emg", data=processed_emg_all)
                     if win_labels is not None:
-                        f.create_dataset("labels", data=win_labels)
+                        f.create_dataset("label", data=win_labels)
 
             # ---- EEG branch ----------------------------------------------------
             if getattr(self.session.config, "USE_EEG", False) and eeg_data is not None:
-                np.savetxt(f"data/trial_{self.params['trial']}_raw_eeg.csv",
+                np.savetxt(os.path.join(rec_dir, "raw_eeg.csv"),
                            eeg_data.transpose(), delimiter=",")
                 if eeg_data.shape[0] < eeg_data.shape[1]:
                     eeg_data = eeg_data.T
@@ -486,7 +547,7 @@ class ExperimentPage(QtWidgets.QWidget):
                 windowed = self._call_window_data_safe(normalised, win_eeg, ov_eeg)
                 if getattr(windowed, "ndim", 0) != 3:
                     print("Warning: EEG windowing produced unexpected shape.")
-                with h5py.File(f"data/trial_{self.params['trial']}_processed_eeg.h5", "w") as f:
+                with h5py.File(os.path.join(rec_dir, "processed_eeg.h5"), "w") as f:
                     f.create_dataset("windowed_data", data=windowed)
 
         print("[processing] pipeline completed")
@@ -506,5 +567,3 @@ class ExperimentPage(QtWidgets.QWidget):
         except Exception:
             pass
         super().closeEvent(event)
-
-

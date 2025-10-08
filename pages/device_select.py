@@ -1,7 +1,6 @@
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from pipeline_sections.classification import classify_emg
 from pipeline_sections.filters import selective_filter
 from pipeline_sections.reduce_eeg_samples import reduce_eeg
 from util.images import Images
@@ -21,7 +20,7 @@ class DeviceSelectPage(QtWidgets.QWidget):
         self.cb_emg = QtWidgets.QCheckBox("Use EMG (Muovi)")
         self.cb_emg.setChecked(True)
         self.cb_eeg = QtWidgets.QCheckBox("Use EEG (Muovi+)")
-        self.cb_eeg.setChecked(True)
+        self.cb_eeg.setChecked(False)
 
         btn_continue = QtWidgets.QPushButton("Continue")
         btn_continue.setFixedHeight(36)

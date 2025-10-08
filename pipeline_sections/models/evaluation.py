@@ -11,7 +11,8 @@ import numpy as np
 import random
 from sklearn.model_selection import train_test_split
 
-from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset
+
+from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
 
 seed_value = 42
 torch.manual_seed(seed_value)
@@ -40,7 +41,7 @@ def load_model(model_path, model, device):
     model.eval()
     return model
 
-def plot_confusion_matrix(true_labels, predicted_labels, num_classes,i):
+def plot_confusion_matrix(true_labels, predicted_labels, num_classes, path=None):
     """
     Plot and save a confusion matrix.
 
@@ -59,8 +60,8 @@ def plot_confusion_matrix(true_labels, predicted_labels, num_classes,i):
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title('Confusion Matrix')
-    plt.savefig('results/evaluation/confusion_matrix_figure.png')
-    # plt.show()
+    path = path if path is not None else r'data\classification_outputs\confusion_matrix_figure.png'
+    plt.savefig(path)
 
 
 class ChannelAdapter(nn.Module):
@@ -112,11 +113,14 @@ class ChannelAdapter(nn.Module):
         x = self.bn(x)
         return x
 
+
 if __name__ == "__main__":
     for i in range(5):
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered"
         # folder_path1 = r"D:\Data\Ninapro_dataset\MIXED\hdf5_format\EB_norm_filtered_reduced"
         folder_path1 = r'D:\Data\Jeff_data\EMG_data\formal\mix\hdf5'
+        folder_path1 = r'C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\trial_1\rec_1'
+
         sample_size = 512
 
 
@@ -155,7 +159,8 @@ if __name__ == "__main__":
         num_classes = 18
         # load best model
         # model = torch.load(r"D:\Code\PhD_Code\IMECE2025_results\68_people_training\best_model_68people_99.46_5.pth")
-        model = torch.load(r"D:\Code\PhD_Code\results\TL_first_look\best_model_all_77.23_1_20251002_150824.pth")
+        #model = torch.load(r"D:\Code\PhD_Code\results\TL_first_look\best_model_all_77.23_1_20251002_150824.pth")
+        model = torch.load(r"C:\Users\tom03\PycharmProjects\EmgOnlineStudy\pipeline_sections\models\model.pth", weights_only=False)
         model.to(device)  # to correct device（CPU or GPU）
         _,preds, labels = evaluate_model(model, val_loader, device)
         report=classification_report(labels, preds, digits=4)
@@ -163,6 +168,6 @@ if __name__ == "__main__":
         # Plot confusion matrix
         plot_confusion_matrix(labels, preds, num_classes,i)
 
-        with open("results/evaluation/classification_report.txt", "w") as f:
+        with open(r"C:\Users\tom03\PycharmProjects\EmgOnlineStudy\data\classification_outputs\classification_report.txt", "w") as f:
             f.write(report)
 

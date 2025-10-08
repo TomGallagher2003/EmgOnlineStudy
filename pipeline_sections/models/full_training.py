@@ -146,7 +146,7 @@ def process_emg_data(file_path, sample_size=512):
     with h5py.File(file_path, 'r') as file:
         # Get data and labels
         emg_data = file['/emg'][:]
-        restimulus_labels = file['/restimulus'][:]
+        restimulus_labels = file['/label'][:]
 
     # Ensure emg_data and restimulus_labels have same length
     assert len(emg_data) == len(restimulus_labels), "EMG data and labels must have the same length."
@@ -250,9 +250,9 @@ def normalize_per_movement(data, labels):
     
     return data
 
-def process_h5_files(folder_path, sample_size=512, max_zero_samples=4000):
+def process_h5_files(folder_path, sample_size=512, max_zero_samples=4000, inclusion_phrase=".h5"):
     """Process HDF5 files to extract and normalize EMG data."""
-    h5_files = [f for f in os.listdir(folder_path) if f.endswith('.h5')]
+    h5_files = [f for f in os.listdir(folder_path) if f.endswith('.h5') and inclusion_phrase in f]
     data, labels = [], []
 
     for file_name in h5_files:
