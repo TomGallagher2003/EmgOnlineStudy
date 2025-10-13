@@ -316,7 +316,7 @@ class ExperimentPage(QtWidgets.QWidget):
             report_save_path=report_path,
             sample_size=sample_size,
             batch_size=512,
-            num_classes=18,
+            num_classes=30,
             repeats=1,
             parent=self
         )
