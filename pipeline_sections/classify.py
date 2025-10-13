@@ -11,7 +11,6 @@ from pipeline_sections.models.full_training import process_h5_files, evaluate_mo
 from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
 
 
-# Use the same imports but from your existing "evaluation" module
 from pipeline_sections.models.evaluation import (
     process_h5_files,
     evaluate_model,
@@ -47,10 +46,10 @@ def run_evaluation(
     confusion_fixed_name: str | None = None,
 ):
     """
-    Callable entrypoint that mirrors your existing evaluation logic.
+    Callable entrypoint that mirrors existing evaluation logic.
 
     Args:
-        folder_path: path to a folder containing your HDF5 windowed data (e.g., trial_X/rec_Y)
+        folder_path: path to a folder containing HDF5 raw emg
         model_path:  path to .pth model file
         sample_size, batch_size, num_classes: same meanings as in your script
         repeats: how many times to run (like your for i in range(5))
@@ -58,7 +57,7 @@ def run_evaluation(
         device: pass a torch.device, otherwise auto-selects cuda/cpu
         report_save_path: where to write the classification report
         confusion_fixed_name: if given, reuse a fixed filename for the confusion matrix;
-                              otherwise your original plot function decides (or you can keep i-based)
+                              otherwise  original plot function decides (or you can keep i-based)
     Returns:
         A list of dicts with {"report": str, "preds": np.ndarray, "labels": np.ndarray}
         (one entry per repeat)
@@ -104,12 +103,8 @@ def run_evaluation(
         # report
         report = classification_report(labels_np, preds, digits=4, zero_division=0)
 
-        # confusion matrix plot (use your original helper; i preserved the 'i' param)
         if confusion_fixed_name is not None:
-            # temporarily monkey-patch the filename expectation by saving, then renaming
             plot_confusion_matrix(labels_np, preds, num_classes, path=os.path.join(folder_path, "confusion_matrix.png"))
-            # move/rename to the fixed name you want
-            # (your original plot function saves to a fixed path; we won't alter its internals)
         else:
             plot_confusion_matrix(labels_np, preds, num_classes, path=os.path.join(folder_path, "confusion_matrix.png"))
 
