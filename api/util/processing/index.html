@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../classify/">
+        <link rel="prev" href="../movement_segmentation/">
       
       
-        <link rel="next" href="../normalisation/">
+        <link rel="next" href="../recording/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>pipeline_sections.filters - EMG/EEG Experiment Program</title>
+        <title>util.processing - EMG/EEG Experiment Program</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline_sectionsfilters" class="md-skip">
+        <a href="#utilprocessing" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              pipeline_sections.filters
+              util.processing
             
           </span>
         </div>
@@ -671,10 +671,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -697,11 +695,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
@@ -717,7 +715,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
             Pipeline sections
@@ -731,7 +729,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../classify/" class="md-nav__link">
+      <a href="../../pipeline_sections/classify/" class="md-nav__link">
         
   
   
@@ -751,32 +749,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    pipeline_sections.filters
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../pipeline_sections/filters/" class="md-nav__link">
         
   
   
@@ -787,44 +763,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters" class="md-nav__link">
-    <span class="md-ellipsis">
-      filters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters.selective_filter" class="md-nav__link">
-    <span class="md-ellipsis">
-      selective_filter
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -837,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../normalisation/" class="md-nav__link">
+      <a href="../../pipeline_sections/normalisation/" class="md-nav__link">
         
   
   
@@ -860,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reduce_eeg_samples/" class="md-nav__link">
+      <a href="../../pipeline_sections/reduce_eeg_samples/" class="md-nav__link">
         
   
   
@@ -883,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows/" class="md-nav__link">
+      <a href="../../pipeline_sections/windows/" class="md-nav__link">
         
   
   
@@ -951,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/cuda_check/" class="md-nav__link">
+      <a href="../../pipeline_sections/models/cuda_check/" class="md-nav__link">
         
   
   
@@ -1063,8 +1001,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1099,11 +1039,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
         
           
           <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
@@ -1119,7 +1059,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_7">
             <span class="md-nav__icon md-icon"></span>
             Util
@@ -1133,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/channel_alignment/" class="md-nav__link">
+      <a href="../channel_alignment/" class="md-nav__link">
         
   
   
@@ -1156,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/data_validation/" class="md-nav__link">
+      <a href="../data_validation/" class="md-nav__link">
         
   
   
@@ -1179,7 +1119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/empty_recording/" class="md-nav__link">
+      <a href="../empty_recording/" class="md-nav__link">
         
   
   
@@ -1202,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/file_pathing/" class="md-nav__link">
+      <a href="../file_pathing/" class="md-nav__link">
         
   
   
@@ -1225,7 +1165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/filter_helpers/" class="md-nav__link">
+      <a href="../filter_helpers/" class="md-nav__link">
         
   
   
@@ -1248,7 +1188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/images/" class="md-nav__link">
+      <a href="../images/" class="md-nav__link">
         
   
   
@@ -1271,7 +1211,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/mask_to_segments/" class="md-nav__link">
+      <a href="../mask_to_segments/" class="md-nav__link">
         
   
   
@@ -1294,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/movement_segmentation/" class="md-nav__link">
+      <a href="../movement_segmentation/" class="md-nav__link">
         
   
   
@@ -1314,10 +1254,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../util/processing/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    util.processing
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1328,6 +1290,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#util.processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      processing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#util.processing.process" class="md-nav__link">
+    <span class="md-ellipsis">
+      process
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1340,7 +1340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/recording/" class="md-nav__link">
+      <a href="../recording/" class="md-nav__link">
         
   
   
@@ -1363,7 +1363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/socket_handling/" class="md-nav__link">
+      <a href="../socket_handling/" class="md-nav__link">
         
   
   
@@ -1431,7 +1431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/OTB_refactored/configuration_processing/" class="md-nav__link">
+      <a href="../OTB_refactored/configuration_processing/" class="md-nav__link">
         
   
   
@@ -1938,15 +1938,21 @@
 
 
 
-<h1 id="pipeline_sectionsfilters">pipeline_sections.filters<a class="headerlink" href="#pipeline_sectionsfilters" title="Permanent link">&para;</a></h1>
+<h1 id="utilprocessing">util.processing<a class="headerlink" href="#utilprocessing" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="pipeline_sections.filters"></a>
+<a id="util.processing"></a>
     <div class="doc doc-contents first">
+
+        <p>Processing functions for decoding raw EMG/EEG data streams.</p>
+<p>This module converts raw byte buffers from the Muovi devices into
+scaled EMG/EEG channel values in millivolts. Handles both EMG and
+EEG devices, applies two’s complement conversion, scaling by gain
+ratios, and filtering for EEG signals.</p>
 
 
 
@@ -1971,33 +1977,17 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pipeline_sections.filters.selective_filter" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">selective_filter</span>
+<h2 id="util.processing.process" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">process</span>
 
 
-<a href="#pipeline_sections.filters.selective_filter" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<a href="#util.processing.process" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">process</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tot_num_byte</span><span class="p">,</span> <span class="n">chan_ready</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>Apply a sequence of user-selected filters to an array.</p>
-<p>The function expects a list of filter-spec dictionaries—each with keys
-<code>type</code>, <code>lower</code>, <code>upper</code>, and <code>center</code>—and applies them in order.
-Supported modes:</p>
-<ul>
-<li><strong>"Pass"</strong>:<ul>
-<li>lower <strong>and</strong> upper → band-pass</li>
-<li>lower only → high-pass</li>
-<li>upper only → low-pass</li>
-</ul>
-</li>
-<li><strong>"Notch"</strong>:<ul>
-<li>center required → notch at <code>center</code> Hz</li>
-</ul>
-</li>
-<li><strong>"None"</strong>: do nothing</li>
-</ul>
+        <p>Decode and process raw EMG/EEG bytes into channel data.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2013,15 +2003,31 @@ Supported modes:</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>filters</code>
+                <code>config</code>
             </td>
             <td>
+                  <code><span title="config.Config">Config</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Iterable of dicts like:
-<code>{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}</code>.
-They are applied <strong>in order</strong> (A then B then C).</p>
+                <p>Configuration object containing channel maps,
+gain ratios, device enables, and mode flags.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temp</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>1D array of raw byte values for one frame.</p>
               </div>
             </td>
             <td>
@@ -2033,12 +2039,45 @@ They are applied <strong>in order</strong> (A then B then C).</p>
                 <code>data</code>
             </td>
             <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Signal array. Shape is project-specific (e.g., <code>(samples, channels)</code>
-or <code>(channels, samples)</code>). The helper filter functions must accept
-this shape.</p>
+                <p>Output 2D array where processed channel
+values are written.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>tot_num_byte</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Total number of bytes expected in the frame.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>chan_ready</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Starting index in <code>data</code> for the next block
+of processed channels.</p>
               </div>
             </td>
             <td>
@@ -2063,7 +2102,8 @@ this shape.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The filtered array (same shape as <code>data</code>).</p>
+                <p>np.ndarray: Updated <code>data</code> array with processed EMG/EEG and
+auxiliary channel values.</p>
               </div>
             </td>
           </tr>
@@ -2074,20 +2114,17 @@ this shape.</p>
 <details class="notes" open>
   <summary>Notes</summary>
   <ul>
-<li>The UI guarantees <code>lower &lt; upper</code> for band-pass. If both are <code>None</code>
-  for "Pass", this step is skipped.</li>
-<li>This function does not inject a sampling rate; the imported helpers
-  (<code>bandpass_filter</code>, etc.) must use project defaults or internal
-  configuration.</li>
+<li>EMG data are 16-bit samples (2 bytes/channel).</li>
+<li>EEG data are 24-bit samples (3 bytes/channel).</li>
+<li>EEG channels are filtered with a 0.3–70 Hz bandpass and
+  50 Hz notch filter via <code>preprocess_eeg</code>.</li>
+<li>Both EMG and EEG signals are converted to millivolts.</li>
 </ul>
 </details>
 
             <details class="quote">
-              <summary>Source code in <code>pipeline_sections\filters.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
+              <summary>Source code in <code>util\processing.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
@@ -2133,56 +2170,125 @@ this shape.</p>
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a sequence of user-selected filters to an array.</span>
-
-<span class="sd">    The function expects a list of filter-spec dictionaries—each with keys</span>
-<span class="sd">    ``type``, ``lower``, ``upper``, and ``center``—and applies them in order.</span>
-<span class="sd">    Supported modes:</span>
-
-<span class="sd">    - **&quot;Pass&quot;**:</span>
-<span class="sd">        - lower **and** upper → band-pass</span>
-<span class="sd">        - lower only → high-pass</span>
-<span class="sd">        - upper only → low-pass</span>
-<span class="sd">    - **&quot;Notch&quot;**:</span>
-<span class="sd">        - center required → notch at ``center`` Hz</span>
-<span class="sd">    - **&quot;None&quot;**: do nothing</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tot_num_byte</span><span class="p">,</span> <span class="n">chan_ready</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode and process raw EMG/EEG bytes into channel data.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        filters:</span>
-<span class="sd">            Iterable of dicts like:</span>
-<span class="sd">            ``{&quot;type&quot;: &quot;None&quot;|&quot;Pass&quot;|&quot;Notch&quot;, &quot;lower&quot;: float|None, &quot;upper&quot;: float|None, &quot;center&quot;: float|None}``.</span>
-<span class="sd">            They are applied **in order** (A then B then C).</span>
-<span class="sd">        data:</span>
-<span class="sd">            Signal array. Shape is project-specific (e.g., ``(samples, channels)``</span>
-<span class="sd">            or ``(channels, samples)``). The helper filter functions must accept</span>
-<span class="sd">            this shape.</span>
+<span class="sd">        config (Config): Configuration object containing channel maps,</span>
+<span class="sd">            gain ratios, device enables, and mode flags.</span>
+<span class="sd">        temp (np.ndarray): 1D array of raw byte values for one frame.</span>
+<span class="sd">        data (np.ndarray): Output 2D array where processed channel</span>
+<span class="sd">            values are written.</span>
+<span class="sd">        tot_num_byte (int): Total number of bytes expected in the frame.</span>
+<span class="sd">        chan_ready (int): Starting index in `data` for the next block</span>
+<span class="sd">            of processed channels.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The filtered array (same shape as ``data``).</span>
+<span class="sd">        np.ndarray: Updated `data` array with processed EMG/EEG and</span>
+<span class="sd">            auxiliary channel values.</span>
 
 <span class="sd">    Notes:</span>
-<span class="sd">        - The UI guarantees ``lower &lt; upper`` for band-pass. If both are ``None``</span>
-<span class="sd">          for &quot;Pass&quot;, this step is skipped.</span>
-<span class="sd">        - This function does not inject a sampling rate; the imported helpers</span>
-<span class="sd">          (``bandpass_filter``, etc.) must use project defaults or internal</span>
-<span class="sd">          configuration.</span>
+<span class="sd">        - EMG data are 16-bit samples (2 bytes/channel).</span>
+<span class="sd">        - EEG data are 24-bit samples (3 bytes/channel).</span>
+<span class="sd">        - EEG channels are filtered with a 0.3–70 Hz bandpass and</span>
+<span class="sd">          50 Hz notch filter via `preprocess_eeg`.</span>
+<span class="sd">        - Both EMG and EEG signals are converted to millivolts.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Pass&quot;</span><span class="p">:</span>
-            <span class="n">lo</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">bandpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">highpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">lowpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Notch&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">notch_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">out</span>
+
+    <span class="c1"># Processing data</span>
+    <span class="k">for</span> <span class="n">DevId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">DEVICE_EN</span><span class="p">[</span><span class="n">DevId</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">EMG</span><span class="p">[</span><span class="n">DevId</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># EMG CASE</span>
+                <span class="n">ch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">ch_ind_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">32</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">38</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+                <span class="n">data_sub_matrix_aux</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind_aux</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind_aux</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+                <span class="c1"># Search for the negative values and make the two&#39;s complement (not on aux)</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data_sub_matrix</span> <span class="o">&gt;=</span> <span class="mi">32768</span><span class="p">)</span>
+                <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">65536</span>
+
+                <span class="c1"># converting raw volts to mV using the ratios from the documentation</span>
+                <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">data_sub_matrix</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">GAIN_RATIOS</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">EMG_MODE</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span>
+
+                <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">32</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">32</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">38</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix_aux</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># EEG CASE</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">MUOVI_PLUS_EEG_CHANNELS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+                <span class="n">ch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">64</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">ch_ind_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">64</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">64</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65536</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> \
+                                  <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+                <span class="n">data_sub_matrix_aux</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind_aux</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65536</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind_aux</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> \
+                                  <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind_aux</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+                <span class="c1"># Search for the negative values and make the two&#39;s complement</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data_sub_matrix</span> <span class="o">&gt;=</span> <span class="mi">8388608</span><span class="p">)</span>
+                <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">16777216</span>
+
+
+                <span class="c1"># converting raw volts to mV using the ratios from the documentation</span>
+                <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">data_sub_matrix</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">GAIN_RATIOS</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">EEG_MODE</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span>
+
+
+                <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">64</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">64</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">70</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix_aux</span>
+
+            <span class="k">del</span> <span class="n">ch_ind</span>
+            <span class="k">del</span> <span class="n">ind</span>
+            <span class="k">del</span> <span class="n">data_sub_matrix</span>
+            <span class="n">chan_ready</span> <span class="o">+=</span> <span class="n">config</span><span class="o">.</span><span class="n">NUM_CHAN</span><span class="p">[</span><span class="n">DevId</span><span class="p">]</span>
+
+    <span class="n">aux_starting_byte</span> <span class="o">=</span> <span class="n">tot_num_byte</span> <span class="o">-</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">aux_starting_byte</span><span class="p">,</span> <span class="n">aux_starting_byte</span> <span class="o">+</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="c1"># Search for the negative values and make the two&#39;s complement</span>
+    <span class="c1"># ind = np.where(data_sub_matrix &gt;= 32768)</span>
+    <span class="c1"># data_sub_matrix[ind] = data_sub_matrix[ind] - 65536</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span>
+    <span class="k">del</span> <span class="n">data_sub_matrix</span>
+
+    <span class="k">return</span> <span class="n">data</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

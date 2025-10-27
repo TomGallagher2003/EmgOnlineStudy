@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../classify/">
+        <link rel="prev" href="../filter_helpers/">
       
       
-        <link rel="next" href="../normalisation/">
+        <link rel="next" href="../mask_to_segments/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>pipeline_sections.filters - EMG/EEG Experiment Program</title>
+        <title>util.images - EMG/EEG Experiment Program</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline_sectionsfilters" class="md-skip">
+        <a href="#utilimages" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              pipeline_sections.filters
+              util.images
             
           </span>
         </div>
@@ -671,10 +671,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -697,11 +695,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
@@ -717,7 +715,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
             Pipeline sections
@@ -731,7 +729,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../classify/" class="md-nav__link">
+      <a href="../../pipeline_sections/classify/" class="md-nav__link">
         
   
   
@@ -751,32 +749,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    pipeline_sections.filters
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../pipeline_sections/filters/" class="md-nav__link">
         
   
   
@@ -787,44 +763,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters" class="md-nav__link">
-    <span class="md-ellipsis">
-      filters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters.selective_filter" class="md-nav__link">
-    <span class="md-ellipsis">
-      selective_filter
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -837,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../normalisation/" class="md-nav__link">
+      <a href="../../pipeline_sections/normalisation/" class="md-nav__link">
         
   
   
@@ -860,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reduce_eeg_samples/" class="md-nav__link">
+      <a href="../../pipeline_sections/reduce_eeg_samples/" class="md-nav__link">
         
   
   
@@ -883,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows/" class="md-nav__link">
+      <a href="../../pipeline_sections/windows/" class="md-nav__link">
         
   
   
@@ -951,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/cuda_check/" class="md-nav__link">
+      <a href="../../pipeline_sections/models/cuda_check/" class="md-nav__link">
         
   
   
@@ -1063,8 +1001,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1099,11 +1039,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
         
           
           <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
@@ -1119,7 +1059,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_7">
             <span class="md-nav__icon md-icon"></span>
             Util
@@ -1133,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/channel_alignment/" class="md-nav__link">
+      <a href="../channel_alignment/" class="md-nav__link">
         
   
   
@@ -1156,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/data_validation/" class="md-nav__link">
+      <a href="../data_validation/" class="md-nav__link">
         
   
   
@@ -1179,7 +1119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/empty_recording/" class="md-nav__link">
+      <a href="../empty_recording/" class="md-nav__link">
         
   
   
@@ -1202,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/file_pathing/" class="md-nav__link">
+      <a href="../file_pathing/" class="md-nav__link">
         
   
   
@@ -1225,7 +1165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/filter_helpers/" class="md-nav__link">
+      <a href="../filter_helpers/" class="md-nav__link">
         
   
   
@@ -1245,10 +1185,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../util/images/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    util.images
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1259,6 +1221,104 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#util.images" class="md-nav__link">
+    <span class="md-ellipsis">
+      images
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#util.images.Images" class="md-nav__link">
+    <span class="md-ellipsis">
+      Images
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.MOVEMENT_IMAGES_A" class="md-nav__link">
+    <span class="md-ellipsis">
+      MOVEMENT_IMAGES_A
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.MOVEMENT_IMAGES_B" class="md-nav__link">
+    <span class="md-ellipsis">
+      MOVEMENT_IMAGES_B
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.REST" class="md-nav__link">
+    <span class="md-ellipsis">
+      REST
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.NAME_TO_FILE" class="md-nav__link">
+    <span class="md-ellipsis">
+      NAME_TO_FILE
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.FILE_TO_NAME" class="md-nav__link">
+    <span class="md-ellipsis">
+      FILE_TO_NAME
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#util.images.Images.MOVEMENT_TUPLES" class="md-nav__link">
+    <span class="md-ellipsis">
+      MOVEMENT_TUPLES
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1271,7 +1331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/mask_to_segments/" class="md-nav__link">
+      <a href="../mask_to_segments/" class="md-nav__link">
         
   
   
@@ -1294,7 +1354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/movement_segmentation/" class="md-nav__link">
+      <a href="../movement_segmentation/" class="md-nav__link">
         
   
   
@@ -1317,7 +1377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/processing/" class="md-nav__link">
+      <a href="../processing/" class="md-nav__link">
         
   
   
@@ -1340,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/recording/" class="md-nav__link">
+      <a href="../recording/" class="md-nav__link">
         
   
   
@@ -1363,7 +1423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/socket_handling/" class="md-nav__link">
+      <a href="../socket_handling/" class="md-nav__link">
         
   
   
@@ -1431,7 +1491,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/OTB_refactored/configuration_processing/" class="md-nav__link">
+      <a href="../OTB_refactored/configuration_processing/" class="md-nav__link">
         
   
   
@@ -1938,14 +1998,14 @@
 
 
 
-<h1 id="pipeline_sectionsfilters">pipeline_sections.filters<a class="headerlink" href="#pipeline_sectionsfilters" title="Permanent link">&para;</a></h1>
+<h1 id="utilimages">util.images<a class="headerlink" href="#utilimages" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="pipeline_sections.filters"></a>
+<a id="util.images"></a>
     <div class="doc doc-contents first">
 
 
@@ -1967,124 +2027,40 @@
 
 
 
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="pipeline_sections.filters.selective_filter" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">selective_filter</span>
+<div class="doc doc-object doc-class">
 
 
-<a href="#pipeline_sections.filters.selective_filter" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-</code></pre></div>
+
+<h2 id="util.images.Images" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Images</span>
+
+
+<a href="#util.images.Images" class="headerlink" title="Permanent link">&para;</a></h2>
+
 
     <div class="doc doc-contents ">
 
-        <p>Apply a sequence of user-selected filters to an array.</p>
-<p>The function expects a list of filter-spec dictionaries—each with keys
-<code>type</code>, <code>lower</code>, <code>upper</code>, and <code>center</code>—and applies them in order.
-Supported modes:</p>
-<ul>
-<li><strong>"Pass"</strong>:<ul>
-<li>lower <strong>and</strong> upper → band-pass</li>
-<li>lower only → high-pass</li>
-<li>upper only → low-pass</li>
-</ul>
-</li>
-<li><strong>"Notch"</strong>:<ul>
-<li>center required → notch at <code>center</code> Hz</li>
-</ul>
-</li>
-<li><strong>"None"</strong>: do nothing</li>
-</ul>
 
 
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>filters</code>
-            </td>
-            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Iterable of dicts like:
-<code>{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}</code>.
-They are applied <strong>in order</strong> (A then B then C).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>data</code>
-            </td>
-            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Signal array. Shape is project-specific (e.g., <code>(samples, channels)</code>
-or <code>(channels, samples)</code>). The helper filter functions must accept
-this shape.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
 
 
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The filtered array (same shape as <code>data</code>).</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
 
 
-<details class="notes" open>
-  <summary>Notes</summary>
-  <ul>
-<li>The UI guarantees <code>lower &lt; upper</code> for band-pass. If both are <code>None</code>
-  for "Pass", this step is skipped.</li>
-<li>This function does not inject a sampling rate; the imported helpers
-  (<code>bandpass_filter</code>, etc.) must use project defaults or internal
-  configuration.</li>
-</ul>
-</details>
 
-            <details class="quote">
-              <summary>Source code in <code>pipeline_sections\filters.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+
+              <details class="quote">
+                <summary>Source code in <code>util\images.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -2133,61 +2109,326 @@ this shape.</p>
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a sequence of user-selected filters to an array.</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Images</span><span class="p">:</span>
+    <span class="n">MOVEMENT_IMAGES_A</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;movement_library/EA/Index_flexion_M1.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Index_Extension_M2.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Middle_Flexion_M3.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Middle_Extension_M4.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Ring_Flexion_M5.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Ring_Extension_M6.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Little_Flexion_M7.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Little_Extension_M8.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Thurmb_Adduction_M9.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Thurmb_Abduction_M10.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Thurmb_Flexion_M11.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EA/Thurmb_Extension_M12.png&quot;</span>
+    <span class="p">]</span>
+    <span class="n">MOVEMENT_IMAGES_B</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;movement_library/EB/Thrumb_up_M13.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/Extension_of_index_and_middle_M14.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/Flexion_of_little_and_ring_M15.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/Thumb_opposing_of base_of_little_finger_M16.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/hands_open_M17.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/Fingures_fixed_together_in_fist_M18.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/pointing_index_M19.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/adduction_of_extended_fingers_M20.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_supination_middile_finger_M21.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_pronation_M22.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_supination_little_finger_M23.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_pronation_little_finger_M24.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_flexion_M25.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_extension_M26.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_radial_deviation_M27.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_ular_deviation_M28.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movement_library/EB/wrist_extension_with_closed_hand_M29.PNG.png&quot;</span>
+    <span class="p">]</span>
 
-<span class="sd">    The function expects a list of filter-spec dictionaries—each with keys</span>
-<span class="sd">    ``type``, ``lower``, ``upper``, and ``center``—and applies them in order.</span>
-<span class="sd">    Supported modes:</span>
+    <span class="n">REST</span> <span class="o">=</span> <span class="s2">&quot;movement_library/Rest_M0.png&quot;</span>
 
-<span class="sd">    - **&quot;Pass&quot;**:</span>
-<span class="sd">        - lower **and** upper → band-pass</span>
-<span class="sd">        - lower only → high-pass</span>
-<span class="sd">        - upper only → low-pass</span>
-<span class="sd">    - **&quot;Notch&quot;**:</span>
-<span class="sd">        - center required → notch at ``center`` Hz</span>
-<span class="sd">    - **&quot;None&quot;**: do nothing</span>
+    <span class="n">NAME_TO_FILE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># Rest</span>
+        <span class="s2">&quot;Rest&quot;</span><span class="p">:</span> <span class="n">REST</span><span class="p">,</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        filters:</span>
-<span class="sd">            Iterable of dicts like:</span>
-<span class="sd">            ``{&quot;type&quot;: &quot;None&quot;|&quot;Pass&quot;|&quot;Notch&quot;, &quot;lower&quot;: float|None, &quot;upper&quot;: float|None, &quot;center&quot;: float|None}``.</span>
-<span class="sd">            They are applied **in order** (A then B then C).</span>
-<span class="sd">        data:</span>
-<span class="sd">            Signal array. Shape is project-specific (e.g., ``(samples, channels)``</span>
-<span class="sd">            or ``(channels, samples)``). The helper filter functions must accept</span>
-<span class="sd">            this shape.</span>
+        <span class="c1"># Set A</span>
+        <span class="s2">&quot;Index Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Index_flexion_M1.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Index Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Index_Extension_M2.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Middle_Flexion_M3.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Middle Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Middle_Extension_M4.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Ring Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Ring_Flexion_M5.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Ring Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Ring_Extension_M6.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Little Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Little_Flexion_M7.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Little Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Little_Extension_M8.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Thumb Adduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Adduction_M9.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Thumb Abduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Abduction_M10.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Thumb Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Flexion_M11.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Thumb Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Extension_M12.png&quot;</span><span class="p">,</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        The filtered array (same shape as ``data``).</span>
+        <span class="c1"># Set B</span>
+        <span class="s2">&quot;Thumb Up&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Thrumb_up_M13.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Index and Middle Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Extension_of_index_and_middle_M14.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Little and Ring Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Flexion_of_little_and_ring_M15.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Thumb Opposing Little Finger&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Thumb_opposing_of base_of_little_finger_M16.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Hands Open&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/hands_open_M17.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Fingers Together in Fist&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Fingures_fixed_together_in_fist_M18.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Index Pointing&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/pointing_index_M19.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Finger Adduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/adduction_of_extended_fingers_M20.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Supination (Middle Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_supination_middile_finger_M21.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Pronation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_pronation_M22.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Supination (Little Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_supination_little_finger_M23.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Pronation (Little Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_pronation_little_finger_M24.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_flexion_M25.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_extension_M26.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Radial Deviation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_radial_deviation_M27.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Ulnar Deviation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_ular_deviation_M28.PNG.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wrist Extension (Closed Hand)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_extension_with_closed_hand_M29.PNG.png&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
 
-<span class="sd">    Notes:</span>
-<span class="sd">        - The UI guarantees ``lower &lt; upper`` for band-pass. If both are ``None``</span>
-<span class="sd">          for &quot;Pass&quot;, this step is skipped.</span>
-<span class="sd">        - This function does not inject a sampling rate; the imported helpers</span>
-<span class="sd">          (``bandpass_filter``, etc.) must use project defaults or internal</span>
-<span class="sd">          configuration.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Pass&quot;</span><span class="p">:</span>
-            <span class="n">lo</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">bandpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">highpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">lowpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Notch&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">notch_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="n">FILE_TO_NAME</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">NAME_TO_FILE</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="n">MOVEMENT_TUPLES</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">NAME_TO_FILE</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.MOVEMENT_IMAGES_A" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">MOVEMENT_IMAGES_A</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.MOVEMENT_IMAGES_A" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">MOVEMENT_IMAGES_A</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;movement_library/EA/Index_flexion_M1.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Index_Extension_M2.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Middle_Flexion_M3.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Middle_Extension_M4.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Ring_Flexion_M5.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Ring_Extension_M6.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Little_Flexion_M7.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Little_Extension_M8.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Thurmb_Adduction_M9.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Thurmb_Abduction_M10.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Thurmb_Flexion_M11.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EA/Thurmb_Extension_M12.png&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
     </div>
 
 </div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.MOVEMENT_IMAGES_B" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">MOVEMENT_IMAGES_B</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.MOVEMENT_IMAGES_B" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">MOVEMENT_IMAGES_B</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;movement_library/EB/Thrumb_up_M13.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/Extension_of_index_and_middle_M14.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/Flexion_of_little_and_ring_M15.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/Thumb_opposing_of base_of_little_finger_M16.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/hands_open_M17.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/Fingures_fixed_together_in_fist_M18.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/pointing_index_M19.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/adduction_of_extended_fingers_M20.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_supination_middile_finger_M21.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_pronation_M22.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_supination_little_finger_M23.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_pronation_little_finger_M24.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_flexion_M25.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_extension_M26.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_radial_deviation_M27.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_ular_deviation_M28.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;movement_library/EB/wrist_extension_with_closed_hand_M29.PNG.png&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.REST" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">REST</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.REST" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">REST</span> <span class="o">=</span> <span class="s1">&#39;movement_library/Rest_M0.png&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.NAME_TO_FILE" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">NAME_TO_FILE</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.NAME_TO_FILE" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">NAME_TO_FILE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Rest&quot;</span><span class="p">:</span> <span class="n">REST</span><span class="p">,</span>
+    <span class="s2">&quot;Index Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Index_flexion_M1.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Index Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Index_Extension_M2.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Middle Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Middle_Flexion_M3.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Middle Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Middle_Extension_M4.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ring Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Ring_Flexion_M5.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ring Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Ring_Extension_M6.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Little Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Little_Flexion_M7.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Little Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Little_Extension_M8.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Adduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Adduction_M9.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Abduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Abduction_M10.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Flexion_M11.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EA/Thurmb_Extension_M12.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Up&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Thrumb_up_M13.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Index and Middle Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Extension_of_index_and_middle_M14.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Little and Ring Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Flexion_of_little_and_ring_M15.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Thumb Opposing Little Finger&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Thumb_opposing_of base_of_little_finger_M16.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Hands Open&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/hands_open_M17.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Fingers Together in Fist&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/Fingures_fixed_together_in_fist_M18.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Index Pointing&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/pointing_index_M19.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Finger Adduction&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/adduction_of_extended_fingers_M20.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Supination (Middle Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_supination_middile_finger_M21.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Pronation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_pronation_M22.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Supination (Little Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_supination_little_finger_M23.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Pronation (Little Finger)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_pronation_little_finger_M24.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Flexion&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_flexion_M25.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Extension&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_extension_M26.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Radial Deviation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_radial_deviation_M27.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Ulnar Deviation&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_ular_deviation_M28.PNG.png&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wrist Extension (Closed Hand)&quot;</span><span class="p">:</span> <span class="s2">&quot;movement_library/EB/wrist_extension_with_closed_hand_M29.PNG.png&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.FILE_TO_NAME" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">FILE_TO_NAME</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.FILE_TO_NAME" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">FILE_TO_NAME</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">kfor</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">items</span><span class="p">())}</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="util.images.Images.MOVEMENT_TUPLES" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">MOVEMENT_TUPLES</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#util.images.Images.MOVEMENT_TUPLES" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">MOVEMENT_TUPLES</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">())</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
 
 
 

@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../classify/">
+        <link rel="prev" href="../../plotting/view_csv/">
       
       
-        <link rel="next" href="../normalisation/">
+        <link rel="next" href="../data_validation/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>pipeline_sections.filters - EMG/EEG Experiment Program</title>
+        <title>util.channel_alignment - EMG/EEG Experiment Program</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline_sectionsfilters" class="md-skip">
+        <a href="#utilchannel_alignment" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              pipeline_sections.filters
+              util.channel_alignment
             
           </span>
         </div>
@@ -671,10 +671,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -697,11 +695,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
@@ -717,7 +715,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
             Pipeline sections
@@ -731,7 +729,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../classify/" class="md-nav__link">
+      <a href="../../pipeline_sections/classify/" class="md-nav__link">
         
   
   
@@ -751,32 +749,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    pipeline_sections.filters
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../pipeline_sections/filters/" class="md-nav__link">
         
   
   
@@ -787,44 +763,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters" class="md-nav__link">
-    <span class="md-ellipsis">
-      filters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters.selective_filter" class="md-nav__link">
-    <span class="md-ellipsis">
-      selective_filter
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -837,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../normalisation/" class="md-nav__link">
+      <a href="../../pipeline_sections/normalisation/" class="md-nav__link">
         
   
   
@@ -860,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reduce_eeg_samples/" class="md-nav__link">
+      <a href="../../pipeline_sections/reduce_eeg_samples/" class="md-nav__link">
         
   
   
@@ -883,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows/" class="md-nav__link">
+      <a href="../../pipeline_sections/windows/" class="md-nav__link">
         
   
   
@@ -951,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/cuda_check/" class="md-nav__link">
+      <a href="../../pipeline_sections/models/cuda_check/" class="md-nav__link">
         
   
   
@@ -1063,8 +1001,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1099,11 +1039,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
         
           
           <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
@@ -1119,7 +1059,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_7">
             <span class="md-nav__icon md-icon"></span>
             Util
@@ -1130,10 +1070,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../util/channel_alignment/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    util.channel_alignment
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1144,6 +1106,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#util.channel_alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      channel_alignment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#util.channel_alignment.simple_alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      simple_alignment
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1156,7 +1156,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/data_validation/" class="md-nav__link">
+      <a href="../data_validation/" class="md-nav__link">
         
   
   
@@ -1179,7 +1179,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/empty_recording/" class="md-nav__link">
+      <a href="../empty_recording/" class="md-nav__link">
         
   
   
@@ -1202,7 +1202,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/file_pathing/" class="md-nav__link">
+      <a href="../file_pathing/" class="md-nav__link">
         
   
   
@@ -1225,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/filter_helpers/" class="md-nav__link">
+      <a href="../filter_helpers/" class="md-nav__link">
         
   
   
@@ -1248,7 +1248,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/images/" class="md-nav__link">
+      <a href="../images/" class="md-nav__link">
         
   
   
@@ -1271,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/mask_to_segments/" class="md-nav__link">
+      <a href="../mask_to_segments/" class="md-nav__link">
         
   
   
@@ -1294,7 +1294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/movement_segmentation/" class="md-nav__link">
+      <a href="../movement_segmentation/" class="md-nav__link">
         
   
   
@@ -1317,7 +1317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/processing/" class="md-nav__link">
+      <a href="../processing/" class="md-nav__link">
         
   
   
@@ -1340,7 +1340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/recording/" class="md-nav__link">
+      <a href="../recording/" class="md-nav__link">
         
   
   
@@ -1363,7 +1363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/socket_handling/" class="md-nav__link">
+      <a href="../socket_handling/" class="md-nav__link">
         
   
   
@@ -1431,7 +1431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/OTB_refactored/configuration_processing/" class="md-nav__link">
+      <a href="../OTB_refactored/configuration_processing/" class="md-nav__link">
         
   
   
@@ -1938,15 +1938,20 @@
 
 
 
-<h1 id="pipeline_sectionsfilters">pipeline_sections.filters<a class="headerlink" href="#pipeline_sectionsfilters" title="Permanent link">&para;</a></h1>
+<h1 id="utilchannel_alignment">util.channel_alignment<a class="headerlink" href="#utilchannel_alignment" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="pipeline_sections.filters"></a>
+<a id="util.channel_alignment"></a>
     <div class="doc doc-contents first">
+
+        <p>Channel alignment utility for EMG-only frames.</p>
+<p>Provides a heuristic to locate the sample-counter channel in recent frames
+and compute the byte offset needed to align frame boundaries in a raw byte
+buffer from the Muovi/SyncStation stream.</p>
 
 
 
@@ -1971,33 +1976,21 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pipeline_sections.filters.selective_filter" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">selective_filter</span>
+<h2 id="util.channel_alignment.simple_alignment" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">simple_alignment</span>
 
 
-<a href="#pipeline_sections.filters.selective_filter" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<a href="#util.channel_alignment.simple_alignment" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">simple_alignment</span><span class="p">(</span><span class="n">data_buffer</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>Apply a sequence of user-selected filters to an array.</p>
-<p>The function expects a list of filter-spec dictionaries—each with keys
-<code>type</code>, <code>lower</code>, <code>upper</code>, and <code>center</code>—and applies them in order.
-Supported modes:</p>
-<ul>
-<li><strong>"Pass"</strong>:<ul>
-<li>lower <strong>and</strong> upper → band-pass</li>
-<li>lower only → high-pass</li>
-<li>upper only → low-pass</li>
-</ul>
-</li>
-<li><strong>"Notch"</strong>:<ul>
-<li>center required → notch at <code>center</code> Hz</li>
-</ul>
-</li>
-<li><strong>"None"</strong>: do nothing</li>
-</ul>
+        <p>Estimate frame alignment offset from the tail of a byte buffer.</p>
+<p>Takes the last 10 frames (assumed 88 bytes per frame for EMG-only) and
+decodes EMG + auxiliary channels to locate a monotonically increasing
+sample-counter channel. Returns the number of bytes to trim from the end
+so that the buffer ends at a frame boundary.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2013,32 +2006,14 @@ Supported modes:</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>filters</code>
+                <code>data_buffer</code>
             </td>
             <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Iterable of dicts like:
-<code>{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}</code>.
-They are applied <strong>in order</strong> (A then B then C).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>data</code>
-            </td>
-            <td>
+                  <code><span title="bytes">bytes</span> | <span title="bytearray">bytearray</span> | <span title="memoryview">memoryview</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Signal array. Shape is project-specific (e.g., <code>(samples, channels)</code>
-or <code>(channels, samples)</code>). The helper filter functions must accept
-this shape.</p>
+                <p>Raw incoming byte buffer.</p>
               </div>
             </td>
             <td>
@@ -2053,17 +2028,17 @@ this shape.</p>
     <table>
       <thead>
         <tr>
-          <th>Type</th>
+<th>Name</th>          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td>
+<td><code>int</code></td>            <td>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The filtered array (same shape as <code>data</code>).</p>
+                <p>Byte offset to drop from the end of <code>data_buffer</code> (0 if not found).</p>
               </div>
             </td>
           </tr>
@@ -2074,16 +2049,15 @@ this shape.</p>
 <details class="notes" open>
   <summary>Notes</summary>
   <ul>
-<li>The UI guarantees <code>lower &lt; upper</code> for band-pass. If both are <code>None</code>
-  for "Pass", this step is skipped.</li>
-<li>This function does not inject a sampling rate; the imported helpers
-  (<code>bandpass_filter</code>, etc.) must use project defaults or internal
-  configuration.</li>
+<li>Assumes 16-bit EMG samples (2 bytes) and 6 auxiliary channels at the
+  end of each 88-byte frame.</li>
+<li>Detects a counter by checking consecutive +1 increments across the
+  first three samples; uses a second channel (+6) to disambiguate.</li>
 </ul>
 </details>
 
             <details class="quote">
-              <summary>Source code in <code>pipeline_sections\filters.py</code></summary>
+              <summary>Source code in <code>util\channel_alignment.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
@@ -2133,56 +2107,82 @@ this shape.</p>
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a sequence of user-selected filters to an array.</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">simple_alignment</span><span class="p">(</span><span class="n">data_buffer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate frame alignment offset from the tail of a byte buffer.</span>
 
-<span class="sd">    The function expects a list of filter-spec dictionaries—each with keys</span>
-<span class="sd">    ``type``, ``lower``, ``upper``, and ``center``—and applies them in order.</span>
-<span class="sd">    Supported modes:</span>
-
-<span class="sd">    - **&quot;Pass&quot;**:</span>
-<span class="sd">        - lower **and** upper → band-pass</span>
-<span class="sd">        - lower only → high-pass</span>
-<span class="sd">        - upper only → low-pass</span>
-<span class="sd">    - **&quot;Notch&quot;**:</span>
-<span class="sd">        - center required → notch at ``center`` Hz</span>
-<span class="sd">    - **&quot;None&quot;**: do nothing</span>
+<span class="sd">    Takes the last 10 frames (assumed 88 bytes per frame for EMG-only) and</span>
+<span class="sd">    decodes EMG + auxiliary channels to locate a monotonically increasing</span>
+<span class="sd">    sample-counter channel. Returns the number of bytes to trim from the end</span>
+<span class="sd">    so that the buffer ends at a frame boundary.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        filters:</span>
-<span class="sd">            Iterable of dicts like:</span>
-<span class="sd">            ``{&quot;type&quot;: &quot;None&quot;|&quot;Pass&quot;|&quot;Notch&quot;, &quot;lower&quot;: float|None, &quot;upper&quot;: float|None, &quot;center&quot;: float|None}``.</span>
-<span class="sd">            They are applied **in order** (A then B then C).</span>
-<span class="sd">        data:</span>
-<span class="sd">            Signal array. Shape is project-specific (e.g., ``(samples, channels)``</span>
-<span class="sd">            or ``(channels, samples)``). The helper filter functions must accept</span>
-<span class="sd">            this shape.</span>
+<span class="sd">        data_buffer (bytes | bytearray | memoryview): Raw incoming byte buffer.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The filtered array (same shape as ``data``).</span>
+<span class="sd">        int: Byte offset to drop from the end of `data_buffer` (0 if not found).</span>
 
 <span class="sd">    Notes:</span>
-<span class="sd">        - The UI guarantees ``lower &lt; upper`` for band-pass. If both are ``None``</span>
-<span class="sd">          for &quot;Pass&quot;, this step is skipped.</span>
-<span class="sd">        - This function does not inject a sampling rate; the imported helpers</span>
-<span class="sd">          (``bandpass_filter``, etc.) must use project defaults or internal</span>
-<span class="sd">          configuration.</span>
+<span class="sd">        - Assumes 16-bit EMG samples (2 bytes) and 6 auxiliary channels at the</span>
+<span class="sd">          end of each 88-byte frame.</span>
+<span class="sd">        - Detects a counter by checking consecutive +1 increments across the</span>
+<span class="sd">          first three samples; uses a second channel (+6) to disambiguate.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Pass&quot;</span><span class="p">:</span>
-            <span class="n">lo</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">bandpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">highpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">lowpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Notch&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">notch_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">out</span>
+
+    <span class="n">num_bytes</span> <span class="o">=</span> <span class="mi">88</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">data_buffer</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">num_bytes</span> <span class="o">*</span> <span class="mi">10</span><span class="p">):]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">45</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="n">temp_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">temp_array</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">88</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># dynamic reshape</span>
+    <span class="c1"># Processing data</span>
+    <span class="n">chan_ready</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">DevId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DevId</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">38</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+            <span class="c1"># Search for the negative values and make the two&#39;s complement</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data_sub_matrix</span> <span class="o">&gt;=</span> <span class="mi">32768</span><span class="p">)</span>
+            <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">65536</span>
+
+            <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">38</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span>
+
+
+            <span class="k">del</span> <span class="n">ch_ind</span>
+            <span class="k">del</span> <span class="n">ind</span>
+            <span class="k">del</span> <span class="n">data_sub_matrix</span>
+            <span class="n">chan_ready</span> <span class="o">+=</span> <span class="mi">38</span>
+    <span class="n">aux_starting_byte</span> <span class="o">=</span> <span class="mi">88</span> <span class="o">-</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">aux_starting_byte</span><span class="p">,</span> <span class="n">aux_starting_byte</span> <span class="o">+</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">data_sub_matrix</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="n">temp</span><span class="p">[</span><span class="n">ch_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># Search for the negative values and make the two&#39;s complement</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data_sub_matrix</span> <span class="o">&gt;=</span> <span class="mi">32768</span><span class="p">)</span>
+    <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">65536</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="n">chan_ready</span><span class="p">:</span><span class="n">chan_ready</span> <span class="o">+</span> <span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_sub_matrix</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">plus6</span> <span class="o">=</span> <span class="n">data</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span><span class="o">%</span><span class="mi">44</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">plus6</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">plus6</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">plus6</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">plus6</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">38</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="mi">44</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">44</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="mi">44</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to find sample counter channel&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

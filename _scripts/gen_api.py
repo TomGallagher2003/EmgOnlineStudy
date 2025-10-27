@@ -13,7 +13,8 @@ ROOTS = [
     Path("widgets"),
     Path("emg_default_settings.py"),
     Path("plotting"),
-    Path("pipeline_sections")
+    Path("pipeline_sections"),
+    Path("util")
 ]
 
 # Regex: "#: some text" immediately above "NAME = ..."

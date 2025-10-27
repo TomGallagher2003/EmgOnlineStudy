@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../classify/">
+        <link rel="prev" href="../images/">
       
       
-        <link rel="next" href="../normalisation/">
+        <link rel="next" href="../movement_segmentation/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>pipeline_sections.filters - EMG/EEG Experiment Program</title>
+        <title>util.mask_to_segments - EMG/EEG Experiment Program</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline_sectionsfilters" class="md-skip">
+        <a href="#utilmask_to_segments" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              pipeline_sections.filters
+              util.mask_to_segments
             
           </span>
         </div>
@@ -671,10 +671,8 @@
                 
   
   
-    
   
   
-  
     
     
       
@@ -697,11 +695,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
@@ -717,7 +715,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
             Pipeline sections
@@ -731,7 +729,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../classify/" class="md-nav__link">
+      <a href="../../pipeline_sections/classify/" class="md-nav__link">
         
   
   
@@ -751,32 +749,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    pipeline_sections.filters
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../pipeline_sections/filters/" class="md-nav__link">
         
   
   
@@ -787,44 +763,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters" class="md-nav__link">
-    <span class="md-ellipsis">
-      filters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipeline_sections.filters.selective_filter" class="md-nav__link">
-    <span class="md-ellipsis">
-      selective_filter
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -837,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../normalisation/" class="md-nav__link">
+      <a href="../../pipeline_sections/normalisation/" class="md-nav__link">
         
   
   
@@ -860,7 +798,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reduce_eeg_samples/" class="md-nav__link">
+      <a href="../../pipeline_sections/reduce_eeg_samples/" class="md-nav__link">
         
   
   
@@ -883,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows/" class="md-nav__link">
+      <a href="../../pipeline_sections/windows/" class="md-nav__link">
         
   
   
@@ -951,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/cuda_check/" class="md-nav__link">
+      <a href="../../pipeline_sections/models/cuda_check/" class="md-nav__link">
         
   
   
@@ -1063,8 +1001,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1099,11 +1039,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" checked>
         
           
           <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
@@ -1119,7 +1059,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_7">
             <span class="md-nav__icon md-icon"></span>
             Util
@@ -1133,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/channel_alignment/" class="md-nav__link">
+      <a href="../channel_alignment/" class="md-nav__link">
         
   
   
@@ -1156,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/data_validation/" class="md-nav__link">
+      <a href="../data_validation/" class="md-nav__link">
         
   
   
@@ -1179,7 +1119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/empty_recording/" class="md-nav__link">
+      <a href="../empty_recording/" class="md-nav__link">
         
   
   
@@ -1202,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/file_pathing/" class="md-nav__link">
+      <a href="../file_pathing/" class="md-nav__link">
         
   
   
@@ -1225,7 +1165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/filter_helpers/" class="md-nav__link">
+      <a href="../filter_helpers/" class="md-nav__link">
         
   
   
@@ -1248,7 +1188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/images/" class="md-nav__link">
+      <a href="../images/" class="md-nav__link">
         
   
   
@@ -1268,10 +1208,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../util/mask_to_segments/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    util.mask_to_segments
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1282,6 +1244,44 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#util.mask_to_segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      mask_to_segments
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#util.mask_to_segments.mask_to_segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      mask_to_segments
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1294,7 +1294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/movement_segmentation/" class="md-nav__link">
+      <a href="../movement_segmentation/" class="md-nav__link">
         
   
   
@@ -1317,7 +1317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/processing/" class="md-nav__link">
+      <a href="../processing/" class="md-nav__link">
         
   
   
@@ -1340,7 +1340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/recording/" class="md-nav__link">
+      <a href="../recording/" class="md-nav__link">
         
   
   
@@ -1363,7 +1363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/socket_handling/" class="md-nav__link">
+      <a href="../socket_handling/" class="md-nav__link">
         
   
   
@@ -1431,7 +1431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../util/OTB_refactored/configuration_processing/" class="md-nav__link">
+      <a href="../OTB_refactored/configuration_processing/" class="md-nav__link">
         
   
   
@@ -1938,14 +1938,14 @@
 
 
 
-<h1 id="pipeline_sectionsfilters">pipeline_sections.filters<a class="headerlink" href="#pipeline_sectionsfilters" title="Permanent link">&para;</a></h1>
+<h1 id="utilmask_to_segments">util.mask_to_segments<a class="headerlink" href="#utilmask_to_segments" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="pipeline_sections.filters"></a>
+<a id="util.mask_to_segments"></a>
     <div class="doc doc-contents first">
 
 
@@ -1971,33 +1971,18 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pipeline_sections.filters.selective_filter" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">selective_filter</span>
+<h2 id="util.mask_to_segments.mask_to_segments" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">mask_to_segments</span>
 
 
-<a href="#pipeline_sections.filters.selective_filter" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<a href="#util.mask_to_segments.mask_to_segments" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">mask_to_segments</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>Apply a sequence of user-selected filters to an array.</p>
-<p>The function expects a list of filter-spec dictionaries—each with keys
-<code>type</code>, <code>lower</code>, <code>upper</code>, and <code>center</code>—and applies them in order.
-Supported modes:</p>
-<ul>
-<li><strong>"Pass"</strong>:<ul>
-<li>lower <strong>and</strong> upper → band-pass</li>
-<li>lower only → high-pass</li>
-<li>upper only → low-pass</li>
-</ul>
-</li>
-<li><strong>"Notch"</strong>:<ul>
-<li>center required → notch at <code>center</code> Hz</li>
-</ul>
-</li>
-<li><strong>"None"</strong>: do nothing</li>
-</ul>
+        <p>Convert a 1D binary mask into start/end index pairs
+for contiguous non-zero regions.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2013,32 +1998,14 @@ Supported modes:</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>filters</code>
+                <code>mask</code>
             </td>
             <td>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Iterable of dicts like:
-<code>{"type": "None"|"Pass"|"Notch", "lower": float|None, "upper": float|None, "center": float|None}</code>.
-They are applied <strong>in order</strong> (A then B then C).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>data</code>
-            </td>
-            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Signal array. Shape is project-specific (e.g., <code>(samples, channels)</code>
-or <code>(channels, samples)</code>). The helper filter functions must accept
-this shape.</p>
+                <p>1D array-like of 0/1 values</p>
               </div>
             </td>
             <td>
@@ -2063,7 +2030,7 @@ this shape.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The filtered array (same shape as <code>data</code>).</p>
+                <p>List of (start, end) index tuples (end is inclusive)</p>
               </div>
             </td>
           </tr>
@@ -2071,20 +2038,16 @@ this shape.</p>
     </table>
 
 
-<details class="notes" open>
-  <summary>Notes</summary>
-  <ul>
-<li>The UI guarantees <code>lower &lt; upper</code> for band-pass. If both are <code>None</code>
-  for "Pass", this step is skipped.</li>
-<li>This function does not inject a sampling rate; the imported helpers
-  (<code>bandpass_filter</code>, etc.) must use project defaults or internal
-  configuration.</li>
-</ul>
-</details>
-
             <details class="quote">
-              <summary>Source code in <code>pipeline_sections\filters.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <summary>Source code in <code>util\mask_to_segments.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -2102,87 +2065,32 @@ this shape.</p>
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">selective_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a sequence of user-selected filters to an array.</span>
-
-<span class="sd">    The function expects a list of filter-spec dictionaries—each with keys</span>
-<span class="sd">    ``type``, ``lower``, ``upper``, and ``center``—and applies them in order.</span>
-<span class="sd">    Supported modes:</span>
-
-<span class="sd">    - **&quot;Pass&quot;**:</span>
-<span class="sd">        - lower **and** upper → band-pass</span>
-<span class="sd">        - lower only → high-pass</span>
-<span class="sd">        - upper only → low-pass</span>
-<span class="sd">    - **&quot;Notch&quot;**:</span>
-<span class="sd">        - center required → notch at ``center`` Hz</span>
-<span class="sd">    - **&quot;None&quot;**: do nothing</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mask_to_segments</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a 1D binary mask into start/end index pairs</span>
+<span class="sd">    for contiguous non-zero regions.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        filters:</span>
-<span class="sd">            Iterable of dicts like:</span>
-<span class="sd">            ``{&quot;type&quot;: &quot;None&quot;|&quot;Pass&quot;|&quot;Notch&quot;, &quot;lower&quot;: float|None, &quot;upper&quot;: float|None, &quot;center&quot;: float|None}``.</span>
-<span class="sd">            They are applied **in order** (A then B then C).</span>
-<span class="sd">        data:</span>
-<span class="sd">            Signal array. Shape is project-specific (e.g., ``(samples, channels)``</span>
-<span class="sd">            or ``(channels, samples)``). The helper filter functions must accept</span>
-<span class="sd">            this shape.</span>
+<span class="sd">        mask: 1D array-like of 0/1 values</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The filtered array (same shape as ``data``).</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        - The UI guarantees ``lower &lt; upper`` for band-pass. If both are ``None``</span>
-<span class="sd">          for &quot;Pass&quot;, this step is skipped.</span>
-<span class="sd">        - This function does not inject a sampling rate; the imported helpers</span>
-<span class="sd">          (``bandpass_filter``, etc.) must use project defaults or internal</span>
-<span class="sd">          configuration.</span>
+<span class="sd">        List of (start, end) index tuples (end is inclusive)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Pass&quot;</span><span class="p">:</span>
-            <span class="n">lo</span><span class="p">,</span> <span class="n">up</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">bandpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">highpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">lo</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">up</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">lowpass_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&quot;Notch&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span> <span class="o">=</span> <span class="n">notch_filter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;center&quot;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="c1"># Find rising and falling edges</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">ends</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Handle edge cases if mask starts/ends inside a region</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">starts</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">ends</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
