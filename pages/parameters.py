@@ -1,8 +1,24 @@
+from typing import Dict, Any
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from emg_default_settings import (DEFAULT_WINDOW_MS, DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ,
                                   DEFAULT_RECORDING_LENGTH_S, DEFAULT_OVERLAP_MS, DEFAULT_NOTCH_HZ,
                                   DEFAULT_USE_AUTO_SEGMENTATION, DEFAULT_APPLY_NORMALISATION)
+
+"""Parameters page (GUI).
+
+This module defines :class:`ParametersPage`, a PyQt5 widget that gathers all
+inputs needed for a single recording attempt: trial number, recording length,
+window/overlap, normalisation and auto-segmentation flags, and up to three
+filters each for EMG and EEG (Pass/Notch/None). It emits a dictionary of
+validated parameters via the ``proceed`` signal.
+
+The page supports a default window size (``DEFAULT_WINDOW_MS``) and an optional
+custom value. An "Apply EMG Defaults" button quickly populates recommended EMG
+settings (overlap, Pass+Notch filters, recording length, auto-segmentation, and
+normalisation) sourced from ``emg_default_settings``.
+"""
 
 
 class ParametersPage(QtWidgets.QWidget):
@@ -12,8 +28,27 @@ class ParametersPage(QtWidgets.QWidget):
     FILTER_OPTIONS = ["None", "Pass", "Notch"]
 
     class FilterRow(QtWidgets.QWidget):
+        """Single filter configuration row with type and parameter inputs.
+
+        The row supports three modes:
+
+        - ``None``: No parameters.
+        - ``Pass``: Lower/Upper frequency bounds (at least one required).
+        - ``Notch``: Center frequency (required).
+
+        Signals:
+            changed (): Emitted whenever any field changes.
+        """
+
         changed = QtCore.pyqtSignal()
+
         def __init__(self, label_text: str, parent=None):
+            """Initialize the filter row UI.
+
+            Args:
+                label_text: Caption shown on the left of the row.
+                parent: Optional Qt parent.
+            """
             super().__init__(parent)
             self.type_box = QtWidgets.QComboBox()
             self.type_box.addItems(ParametersPage.FILTER_OPTIONS)
@@ -55,7 +90,8 @@ class ParametersPage(QtWidgets.QWidget):
                 w.textChanged.connect(self.changed.emit)
             self._update_rows()
 
-        def _update_rows(self):
+        def _update_rows(self) -> None:
+            """Show/hide parameter subrows according to the selected filter type."""
             t = self.type_box.currentText()
             self.none_row.setVisible(t == "None")
             self.pass_row.setVisible(t == "Pass")
@@ -63,6 +99,13 @@ class ParametersPage(QtWidgets.QWidget):
             self.changed.emit()
 
         def value(self) -> dict:
+            """Return the current filter configuration as a dict.
+
+            Returns:
+                Dict with keys ``type`` (``"None"|"Pass"|"Notch"``),
+                and possibly ``lower``, ``upper``, ``center`` carrying float
+                values or ``None`` when unset.
+            """
             def f(le: QtWidgets.QLineEdit):
                 txt = le.text().strip()
                 return float(txt) if txt else None
@@ -75,6 +118,14 @@ class ParametersPage(QtWidgets.QWidget):
             return out
 
         def validate(self, parent: QtWidgets.QWidget) -> bool:
+            """Validate the row values according to the selected filter type.
+
+            Args:
+                parent: Parent widget used as the message box owner.
+
+            Returns:
+                True if valid; False otherwise (after showing a warning dialog).
+            """
             t = self.type_box.currentText()
             if t == "Pass":
                 lower = self.lower_edit.text().strip()
@@ -96,21 +147,25 @@ class ParametersPage(QtWidgets.QWidget):
             return True
 
         # --- Minimal setters to allow programmatic defaults ---
-        def set_type(self, t: str):
+        def set_type(self, t: str) -> None:
+            """Set the filter type (``None``, ``Pass``, or ``Notch``)."""
             if t in ParametersPage.FILTER_OPTIONS:
                 self.type_box.setCurrentText(t)
                 self._update_rows()
 
-        def set_pass(self, lower: float = None, upper: float = None):
+        def set_pass(self, lower: float = None, upper: float = None) -> None:
+            """Configure a Pass filter with optional lower/upper bounds."""
             self.set_type("Pass")
             self.lower_edit.setText("" if lower is None else str(lower))
             self.upper_edit.setText("" if upper is None else str(upper))
 
-        def set_notch(self, center: float = None):
+        def set_notch(self, center: float = None) -> None:
+            """Configure a Notch filter with an optional center frequency."""
             self.set_type("Notch")
             self.center_edit.setText("" if center is None else str(center))
 
-        def set_none(self):
+        def set_none(self) -> None:
+            """Configure a None filter (clears all parameter fields)."""
             self.set_type("None")
             # Clear any lingering values
             self.lower_edit.clear()
@@ -118,6 +173,13 @@ class ParametersPage(QtWidgets.QWidget):
             self.center_edit.clear()
 
     def __init__(self, use_emg: bool, use_eeg: bool, parent=None):
+        """Build the parameters form with EMG/EEG sections and defaults.
+
+        Args:
+            use_emg: Whether EMG options should be shown and emitted.
+            use_eeg: Whether EEG options should be shown and emitted.
+            parent: Optional Qt parent.
+        """
         super().__init__(parent)
         self.use_emg = use_emg
         self.use_eeg = use_eeg
@@ -230,7 +292,8 @@ class ParametersPage(QtWidgets.QWidget):
 
         self.btn_next.clicked.connect(self._on_continue)
 
-    def _toggle_custom_window(self):
+    def _toggle_custom_window(self) -> None:
+        """Toggle visibility of the custom window-size input and reset if disabled."""
         self._custom_window_enabled = not self._custom_window_enabled
         self.custom_row.setVisible(self._custom_window_enabled)
         self.window_custom_btn.setText("Default" if self._custom_window_enabled else "Custom…")
@@ -239,20 +302,25 @@ class ParametersPage(QtWidgets.QWidget):
             self.window_ms_edit.clear()
 
     def _validate_filter_group(self, rows) -> bool:
+        """Validate a sequence of :class:`FilterRow` instances."""
         for r in rows:
             if not r.validate(self):
                 return False
         return True
 
-    def _apply_emg_defaults(self):
-        """
-        Apply EMG defaults:
-          - Overlap (ms)       -> DEFAULT_OVERLAP_MS
-          - EMG First Filter   -> Pass [DEFAULT_LOWER_HZ, DEFAULT_UPPER_HZ]
-          - EMG Second Filter  -> Notch @ DEFAULT_NOTCH_HZ
-          - EMG Third Filter   -> None
-          - Auto segmentation  -> DEFAULT_USE_AUTO_SEGMENTATION
-          - Recording length   -> DEFAULT_RECORDING_LENGTH_S
+    def _apply_emg_defaults(self) -> None:
+        """Apply a recommended EMG preset configuration.
+
+        Sets overlap, filters (Pass + Notch), auto segmentation, normalisation,
+        and recording length based on constants from ``emg_default_settings``:
+
+        - Overlap (ms)       -> ``DEFAULT_OVERLAP_MS``
+        - EMG First Filter   -> Pass [``DEFAULT_LOWER_HZ``, ``DEFAULT_UPPER_HZ``]
+        - EMG Second Filter  -> Notch @ ``DEFAULT_NOTCH_HZ``
+        - EMG Third Filter   -> None
+        - Auto segmentation  -> ``DEFAULT_USE_AUTO_SEGMENTATION``
+        - Normalisation      -> ``DEFAULT_APPLY_NORMALISATION``
+        - Recording length   -> ``DEFAULT_RECORDING_LENGTH_S``
         """
         # Overlap
         self.overlap_ms_edit.setText(str(DEFAULT_OVERLAP_MS))
@@ -262,14 +330,26 @@ class ParametersPage(QtWidgets.QWidget):
         self.emg_b.set_notch(center=DEFAULT_NOTCH_HZ)
         self.emg_c.set_none()
 
-        # Auto-segmentation
+        # Auto-segmentation & normalisation
         self.emg_auto_seg.setChecked(DEFAULT_USE_AUTO_SEGMENTATION)
         self.use_normalisation.setChecked(DEFAULT_APPLY_NORMALISATION)
 
         # Recording length
         self.length_edit.setText(str(DEFAULT_RECORDING_LENGTH_S))
 
-    def _on_continue(self):
+    def _on_continue(self) -> None:
+        """Validate inputs and emit the consolidated parameters dict.
+
+        Emits:
+            proceed (dict): A dictionary with keys:
+                - trial (int)
+                - recording_length (float, seconds)
+                - window_ms (float)
+                - overlap_ms (float)
+                - filters (dict): {"emg": [..], "eeg": [..]}
+                - use_auto (bool)
+                - use_normalisation (bool)
+        """
         # Trial
         t = self.trial_edit.text().strip()
         try:

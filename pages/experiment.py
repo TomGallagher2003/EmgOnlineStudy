@@ -23,14 +23,61 @@ from workers.pipeline import PipelineWorker
 from workers.recording import RecordingWorker
 from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
 from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
+from main_settings import MODEL_PATH
 
+"""Experiment execution page (GUI).
+
+This module defines :class:`ExperimentPage`, a PyQt5 widget that orchestrates a
+single-trial workflow:
+
+1) Device init/check and session creation on entry.
+2) Random movement selection with large preview image.
+3) Timed recording (Arc timer) on a background thread.
+4) Post-recording pipeline (filter → normalise → window) for EMG/EEG.
+5) Optional EMG-only classification using H5 written during processing.
+
+Data persisted per trial:
+    data/trial_<trial_num>/rec_<N>/
+        - raw_emg.csv, raw_emg.h5 (if EMG enabled)
+        - processed_emg.h5 with windowed data + labels
+        - raw_eeg.csv, processed_eeg.h5 (if EEG enabled)
+        - label.csv
+        - classification_report.txt (after classification)
+
+Notes:
+    - Imports intentionally re-export model symbols required elsewhere. Do not
+      remove imports.
+    - No behavior changes; only documentation added for mkdocstrings.
+"""
 
 MOVEMENTS = Images.MOVEMENT_TUPLES
 
 SAVE_AS_NPY = False
 
+
 class ExperimentPage(QtWidgets.QWidget):
-    """Random movement + Start — session is initialized on entry (device check happens here)."""
+    """Random movement + Start — session is initialized on entry (device check happens here).
+
+    This widget manages the full "one attempt" flow: pick a random movement, run a
+    fixed-length capture, process the data, and (if EMG is enabled) run a quick
+    in-label classification using the H5 artifacts produced by the pipeline.
+
+    Args:
+        use_emg: Whether EMG channels are active for this experiment.
+        use_eeg: Whether EEG channels are active for this experiment.
+        params: Optional runtime parameters dict. Expected keys include
+            - ``recording_length`` (float, seconds)
+            - ``window_ms`` (int)
+            - ``overlap_ms`` (int)
+            - ``use_auto`` (bool): use auto segmentation for labels when EMG present
+            - ``use_normalisation`` (bool)
+            - ``filters`` (dict): e.g., ``{"emg": {...}, "eeg": {...}}``
+            - ``trial`` (int): current trial number (used in folder naming)
+        parent: Optional Qt parent.
+
+    Signals:
+        (Signals are on the various worker threads; connect within this widget.)
+    """
 
     def __init__(self, use_emg, use_eeg, params: Optional[Dict[str, Any]] = None, parent=None):
         super().__init__(parent)
@@ -84,7 +131,8 @@ class ExperimentPage(QtWidgets.QWidget):
         self.results_label = QtWidgets.QLabel("Not yet classified")
         self.results_label.setWordWrap(True)
         self.results_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
-        self.results_label.setMinimumHeight(24)
+        self.results_label.setMinimumHeight(36)
+        self.results_label.setStyleSheet("font-size: 30px;")
         rb_layout.addWidget(self.results_label)
         self.results_box.setVisible(self.use_emg)
 
@@ -102,7 +150,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
         self.images_root = pathlib.Path(__file__).resolve().parents[1]
 
-        # NEW: default model/report paths (override if needed via params)
+        # NEW: default model/report paths
         self.project_root = self.images_root
         self.model_path = str(self.project_root / "pipeline_sections" / "models" / "model.pth")
 
@@ -115,9 +163,20 @@ class ExperimentPage(QtWidgets.QWidget):
     # --------------------- NEW: per-trial, incrementing recording folders ---------------------
     def _prepare_recording_dir(self, trial_num: int) -> str:
         """
-        Create and return a unique recording directory for this trial:
-            data/trial_<trial_num>/rec_<N>/
-        where N starts at 1 and increments for each new recording in that trial.
+        Create and return a unique recording directory for this trial.
+
+        The path format is:
+
+            ``data/trial_<trial_num>/rec_<N>/``
+
+        where ``N`` is a 1-based counter incremented for each capture within the
+        same trial.
+
+        Args:
+            trial_num: Trial identifier used to group multiple recordings.
+
+        Returns:
+            Absolute or relative directory path created for the next recording.
         """
         base_dir = os.path.join("data", f"trial_{trial_num}")
         os.makedirs(base_dir, exist_ok=True)
@@ -140,6 +199,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # scale image on resize
     def resizeEvent(self, event):
+        """Keep the preview image scaled to the label size on widget resize."""
         super().resizeEvent(event)
         if self._current_pixmap_path and os.path.exists(self._current_pixmap_path):
             pix = QtGui.QPixmap(self._current_pixmap_path)
@@ -153,6 +213,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # ----- Flusher helpers -----
     def _start_flusher(self):
+        """Start the idle flusher thread if a session exists and no flusher is running."""
         if self.session is None:
             return
         if self._flusher is not None and self._flusher.isRunning():
@@ -162,6 +223,7 @@ class ExperimentPage(QtWidgets.QWidget):
         print("[flush] started")
 
     def _stop_flusher(self):
+        """Request the idle flusher to stop and wait briefly for termination."""
         if self._flusher is not None:
             self._flusher.stop()
             # wait briefly to ensure it stops before recording starts
@@ -170,6 +232,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # ----- Device init callbacks -----
     def _on_devices_ready(self, session: Session):
+        """UI handler invoked when devices are initialized and the session is ready."""
         self.session = session
         self.status_label.setText("Devices ready.")
         self.btn_random.setEnabled(True)
@@ -178,10 +241,12 @@ class ExperimentPage(QtWidgets.QWidget):
         self._start_flusher()
 
     def _on_devices_failed(self, msg: str):
+        """UI handler invoked on device/session initialization failure."""
         self.status_label.setText(msg)
 
     # ----- Experiment flow -----
     def pick_random_movement(self):
+        """Select a random movement (avoiding immediate repeats) and update the preview image."""
         # Better randomness + avoid immediate repeats
         rng = random.SystemRandom()
         if len(MOVEMENTS) > 1:
@@ -222,6 +287,7 @@ class ExperimentPage(QtWidgets.QWidget):
             self.btn_start.setEnabled(True)
 
     def start_recording(self):
+        """Begin a timed recording for the selected movement and hook up callbacks."""
         if self.arc.is_running() or self.session is None:
             return
         if self.current_movement is None:
@@ -247,6 +313,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self.recording_worker.start()
 
     def _on_recording_failed(self, msg: str):
+        """Handle capture failure: surface error, re-enable controls, and resume flushing."""
         self.status_label.setText(f"Error: {msg}")
         self.btn_random.setEnabled(True)
         self.btn_start.setEnabled(True)
@@ -256,6 +323,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self._start_flusher()
 
     def _on_recording_finished(self, data):
+        """Handle successful capture by starting the processing pipeline."""
         self.recording_done = True
         # Immediately resume flushing while we process, to keep stream fresh
         self._start_flusher()
@@ -274,6 +342,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self._pipeline_worker.start()
 
     def _on_arc_complete(self):
+        """When the arc timer finishes, restore controls if no background work remains."""
         # If recording is still finishing behind the scenes, make it explicit to the user.
         if not self.recording_done:
             self.status_label.setText("Finishing capture…")
@@ -289,6 +358,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # ----- Pipeline step callbacks -----
     def _on_pipeline_done(self, processed_tuple):
+        """Handle pipeline completion and, if EMG enabled, begin classification."""
         self.is_pipeline_running = False
 
         # If EMG not selected, or not a proper tuple, skip classification.
@@ -312,7 +382,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
         self._classification_worker = ClassificationWorker(
             folder_path=self._current_rec_dir or "",
-            model_path=self.model_path,
+            model_path=MODEL_PATH,
             report_save_path=report_path,
             sample_size=sample_size,
             batch_size=512,
@@ -325,6 +395,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self._classification_worker.start()
 
     def _on_pipeline_failed(self, msg: str):
+        """Handle pipeline failure and restore controls."""
         self.is_pipeline_running = False
         self.status_label.setText(f"Pipeline error: {msg}")
         self.btn_random.setEnabled(True)
@@ -332,6 +403,7 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # ----- Classification step callbacks -----
     def _on_classification_done(self, result):
+        """Render classification result tuple ``(pred_class, confidence)`` to the UI."""
         self.is_classifying = False
         # Expect (A, B) from classify_emg() on IN-LABEL subset
         try:
@@ -357,6 +429,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self.btn_start.setEnabled(self.session is not None and self.current_movement is not None)
 
     def _on_classification_failed(self, msg: str):
+        """Handle classification error and restore controls."""
         self.is_classifying = False
         self.status_label.setText(f"Classification error: {msg}")
         self.btn_random.setEnabled(True)
@@ -366,8 +439,14 @@ class ExperimentPage(QtWidgets.QWidget):
 
     def _get_fs(self, kind: str) -> float:
         """
-        Sampling rate from session.config.
-        kind: "emg" or "eeg"
+        Get sampling rate from ``session.config``.
+
+        Args:
+            kind: Either ``"emg"`` or ``"eeg"``.
+
+        Returns:
+            Sampling frequency in Hz. Falls back to sensible defaults if the
+            configuration is missing.
         """
         cfg = getattr(self.session, "config", None)
         if cfg is None:
@@ -382,12 +461,25 @@ class ExperimentPage(QtWidgets.QWidget):
             return 1000.0
 
     def _ms_to_samples(self, ms: float, fs: float) -> int:
+        """Convert milliseconds to integer sample count at sampling rate ``fs``."""
         return max(1, int(round(ms * fs / 1000.0)))
 
     def _window_by_samples_fallback(self, data_2d: np.ndarray, win: int, overlap: int) -> np.ndarray:
         """
-        Fallback windowing: returns array shape (n_windows, win, n_channels).
-        Expects data_2d shape (samples, channels).
+        Fallback windowing routine.
+
+        Builds windows of shape ``(n_windows, win, n_channels)`` from a 2-D
+        array of shape ``(samples, channels)`` using step size
+        ``max(1, win - overlap)``.
+
+        Args:
+            data_2d: Input array, 2-D (samples, channels).
+            win: Window length in samples.
+            overlap: Overlap in samples (``0 <= overlap < win``).
+
+        Returns:
+            Windowed array of shape ``(n_windows, win, n_channels)`` or an
+            empty array if parameters are invalid or not enough samples.
         """
         if data_2d.ndim != 2:
             raise ValueError("Expected 2D array (samples, channels).")
@@ -403,8 +495,20 @@ class ExperimentPage(QtWidgets.QWidget):
 
     def _call_window_data_safe(self, arr: np.ndarray, win_samp: int, overlap_samp: int) -> np.ndarray:
         """
-        Call the imported window_data with likely signatures, or fall back to a local implementation.
-        Expects arr shape (samples, channels).
+        Call :func:`window_data` with common signatures; fallback locally if needed.
+
+        Attempts:
+            1) ``window_data(arr, window_size=win_samp, overlap=overlap_samp)``
+            2) ``window_data(arr, win_samp, overlap_samp)``
+            3) Local fallback :meth:`_window_by_samples_fallback`.
+
+        Args:
+            arr: Array of shape ``(samples, channels)``.
+            win_samp: Window length in samples.
+            overlap_samp: Overlap in samples.
+
+        Returns:
+            Windowed array of shape ``(n_windows, win, channels)`` (possibly empty).
         """
         # Try kwargs with common names
         try:
@@ -423,12 +527,37 @@ class ExperimentPage(QtWidgets.QWidget):
 
     def run_pipeline(self, movement_name: str, data):
         """
+        Run the online processing pipeline and persist artifacts.
+
+        Steps (EMG branch):
+            1) Build label vector (auto segmentation if enabled & EMG present).
+            2) Save raw and label artifacts to per-trial/recording folder.
+            3) Filter → (optional) normalise → window (all samples).
+            4) Build in-label-only raw buffer (non-zero labels), then
+               filter/normalise/window separately for classification.
+
+        Steps (EEG branch):
+            1) Save raw.
+            2) Reduce → filter → (optional) normalise → window.
+            3) Save windowed EEG to H5.
+
+        Args:
+            movement_name: Name of the selected movement (for logging/metadata).
+            data: Raw capture payload (array-like). EMG/EEG slices are derived
+                using indices from ``session.config``.
+
         Returns:
-            (processed_emg_all, processed_emg_inlabel)
-              processed_emg_all      (np.ndarray | None): windowed + (optionally) normalised EMG (all samples)
-              processed_emg_inlabel  (np.ndarray | None): windowed + (optionally) normalised EMG built from a
-                                                          *separately processed* raw array that contains only
-                                                          samples whose label is non-zero (i.e., no zeros).
+            tuple:
+                processed_emg_all (np.ndarray | None):
+                    Windowed (+normalised if enabled) EMG for all samples.
+                processed_emg_inlabel (np.ndarray | None):
+                    Windowed (+normalised if enabled) EMG built from a
+                    separately constructed raw buffer containing only non-zero
+                    labels (i.e., no rest).
+
+        Notes:
+            - Persists multiple CSV/H5 files into ``data/trial_<t>/rec_<N>/``.
+            - ``sample_size`` for classification is derived from ``window_ms``.
         """
         print(f"[processing] movement: {movement_name}")
         print(f"[processing] data shape: {getattr(data, 'shape', None)}")
@@ -558,6 +687,7 @@ class ExperimentPage(QtWidgets.QWidget):
         return (processed_emg_all, processed_emg_inlabel)
 
     def closeEvent(self, event):
+        """Ensure background threads and the device session are cleanly shut down on close."""
         try:
             if self._flusher is not None and self._flusher.isRunning():
                 self._flusher.stop()

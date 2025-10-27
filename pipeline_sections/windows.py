@@ -1,16 +1,30 @@
 import numpy as np
 
 def window_data(data: np.ndarray, sample_size: int = 512, overlap: int = 0) -> np.ndarray:
-    """
-    Slice data into fixed-length windows using a sliding window.
+    """Slice a multichannel signal into fixed-length, possibly overlapping windows.
+
+    Uses a sliding window with hop length ``step_size = sample_size - overlap``.
+    Windows are emitted only when a **full** window fits inside ``data``.
 
     Args:
-        data: (n_samples, n_channels) array
-        sample_size: number of samples per window
-        step_size: hop length between windows
+        data:
+            Array of shape ``(n_samples, n_channels)``.
+        sample_size:
+            Number of samples per window (window length).
+        overlap:
+            Number of samples that consecutive windows share
+            (must satisfy ``0 <= overlap < sample_size``).
 
     Returns:
-        windows: (n_windows, sample_size, n_channels) array
+        np.ndarray:
+            Window tensor of shape ``(n_windows, sample_size, n_channels)``.
+            If fewer than ``sample_size`` samples are available, returns an empty
+            array with shape ``(0, sample_size, n_channels)``.
+
+    Notes:
+        - This function does **not** pad; trailing samples that cannot form a full
+          window are discarded.
+        - No copying is guaranteed—NumPy may copy or view depending on strides.
     """
     step_size = sample_size - overlap
     segments = []
@@ -24,17 +38,31 @@ def window_data(data: np.ndarray, sample_size: int = 512, overlap: int = 0) -> n
 
     return np.stack(segments) if segments else np.empty((0, sample_size, data.shape[1]))
 
+
 def window_labels(labels: np.ndarray, sample_size: int = 512, overlap: int = 0) -> np.ndarray:
-    """
-    Slice a 1D label array into fixed-length windows.
+    """Window a 1-D label sequence to align with windowed data.
+
+    Uses the same sliding-window scheme as :func:`window_data` with hop length
+    ``step_size = sample_size - overlap``. Only full windows are returned.
 
     Args:
-        labels: (n_samples,) array of labels
-        sample_size: number of samples per window
-        step_size: hop length between windows
+        labels:
+            1-D array of length ``n_samples`` containing integer/float labels.
+        sample_size:
+            Number of samples per window.
+        overlap:
+            Number of samples shared by consecutive windows
+            (must satisfy ``0 <= overlap < sample_size``).
 
     Returns:
-        windows: (n_windows, sample_size) array of label windows
+        np.ndarray:
+            Array of shape ``(n_windows, sample_size)`` containing label windows.
+            Returns an empty array with shape ``(0, sample_size)`` if not enough
+            samples exist for one full window.
+
+    Notes:
+        - Keep ``sample_size`` and ``overlap`` identical to the values passed to
+          :func:`window_data` to maintain alignment.
     """
     step_size = sample_size - overlap
     labels = np.asarray(labels)
@@ -48,5 +76,3 @@ def window_labels(labels: np.ndarray, sample_size: int = 512, overlap: int = 0) 
         start += step_size
 
     return np.stack(segments) if segments else np.empty((0, sample_size), dtype=labels.dtype)
-
-

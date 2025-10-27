@@ -1,0 +1,64 @@
+site_name: EMG/EEG Experiment Program
+site_description: Tkinter UI and recording utilities for EMG/EEG exercise sessions
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - content.code.copy
+    - toc.integrate
+
+
+plugins:
+  - search
+  - autorefs
+  - gen-files:
+      scripts:
+        - docs/_scripts/gen_api.py
+  - literate-nav:
+      nav_file: api/SUMMARY.nav
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            docstring_style: google
+            show_source: true
+            separate_signature: true
+            show_if_no_docstring: true
+            members_order: source
+
+nav:
+  - Overview: index.md
+  - Getting Started: getting-started.md
+  - Structure: dev/structure.md
+  - Quick Change Guides:
+      - Add Filter :  quick-change-guides/add_filter.md
+      - Switch Model: quick-change-guides/switch_model.md
+      - Change Probe Modes : quick-change-guides/gain_and_scale_modes.md
+      - Swap Movement Sets & Image Library : quick-change-guides/movement_sets_and_images.md
+      - Plotting Guide : quick-change-guides/plotting_quick_tweaks.md
+  - API Reference: api/SUMMARY.nav
+  - Contact: contact.md
+
+
+
+
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.emoji
+
+watch:
+  - pages
+  - workers
+  - widgets
+  - main.py
+  - util
+  - pipeline_sections

@@ -22,6 +22,25 @@ from pipeline_sections.models.evaluation import (
     ChannelAdapter
 )
 
+"""Lightweight evaluation wrapper for EMG classification models.
+
+This module provides :func:`run_evaluation`, a callable entry point that mirrors
+your existing notebook/script logic so the UI (or other tools) can trigger a
+repeatable evaluation pass on a folder of HDF5 artifacts.
+
+Workflow overview:
+    1) Load EMG windows and labels from a single folder via ``process_h5_files``.
+    2) Build a ``DataLoader`` for validation (shuffled each repeat).
+    3) Load a model checkpoint (either a full pickled model or state_dict route).
+    4) Run inference with ``evaluate_model`` to obtain predictions and labels.
+    5) Produce a ``classification_report`` and confusion matrix image.
+    6) Return a list of result dicts, one per repeat.
+
+Reproducibility:
+    Global seeds are set (NumPy / PyTorch CPU & CUDA) and cuDNN is forced into
+    deterministic mode with benchmarking disabled to reduce run-to-run variance.
+"""
+
 # keep the same reproducibility settings/style
 seed_value = 42
 torch.manual_seed(seed_value)
@@ -44,34 +63,71 @@ def run_evaluation(
     use_full_model_pickle: bool = True,
     device: torch.device | None = None,
     confusion_fixed_name: str | None = None,
+    use_processed: bool = False,
+    model_is_eeg: bool = False
 ):
-    """
-    Callable entrypoint that mirrors existing evaluation logic.
+    """Evaluate a trained model on EMG windows stored in a folder.
+
+    This callable mirrors your existing evaluation script so it can be invoked
+    programmatically (e.g., from a GUI worker). It shuffles the validation set
+    on each repeat, computes predictions, writes a classification report, plots
+    a confusion matrix, and returns key artifacts.
 
     Args:
-        folder_path: path to a folder containing HDF5 raw emg
-        model_path:  path to .pth model file
-        sample_size, batch_size, num_classes: same meanings as in your script
-        repeats: how many times to run (like your for i in range(5))
-        use_full_model_pickle: True if the checkpoint is a pickled full model
-        device: pass a torch.device, otherwise auto-selects cuda/cpu
-        report_save_path: where to write the classification report
-        confusion_fixed_name: if given, reuse a fixed filename for the confusion matrix;
-                              otherwise  original plot function decides (or you can keep i-based)
+        folder_path:
+            Path to a folder containing HDF5 files with EMG windows/labels
+            (as produced by your pipeline). The helper ``process_h5_files`` is
+            used to load a single folder.
+        model_path:
+            Path to the model checkpoint. If ``use_full_model_pickle`` is True,
+            this should be a pickled full model; otherwise the function will
+            instantiate a ``CNN1D_Transformer`` and load a state_dict.
+        report_save_path:
+            File path to write the ``classification_report`` text output.
+        sample_size:
+            Window length (samples) used when loading/validating.
+        batch_size:
+            Batch size for the ``DataLoader``.
+        num_classes:
+            Number of classes the model predicts.
+        repeats:
+            How many evaluation repeats to perform (reshuffles each time).
+        use_full_model_pickle:
+            Whether to ``torch.load`` a full serialized model object.
+        device:
+            Optional ``torch.device``. If ``None``, chooses CUDA when available.
+        confusion_fixed_name:
+            If provided, indicates a fixed name strategy for the confusion
+            matrix. (Current implementation saves to ``confusion_matrix.png``.)\
+        use_processed:
+            boolean indicating whether to search for processed or raw data files
+
     Returns:
-        A list of dicts with {"report": str, "preds": np.ndarray, "labels": np.ndarray}
-        (one entry per repeat)
+        list[dict]:
+            A list of dictionaries (one per repeat) with keys:
+            - ``"report"`` (str): the classification report text.
+            - ``"preds"`` (np.ndarray): predicted class indices.
+            - ``"labels"`` (np.ndarray): ground-truth class indices.
+
+    Notes:
+        - ``process_h5_files`` is called with ``inclusion_phrase="raw_emg"`` and
+          ``max_zero_samples=400`` to mirror prior behavior.
+        - The confusion matrix is currently saved to ``<folder_path>/confusion_matrix.png``.
+          If you later vary naming by repeat, use ``confusion_fixed_name``.
     """
     folder_path = Path(folder_path)
     model_path = Path(model_path)
     out_dir = Path(report_save_path).parent
     out_dir.mkdir(parents=True, exist_ok=True)
+    inclusion_p1 = "processed_" if use_processed else "raw_"
+    inclusion_p2 = "eeg" if model_is_eeg else "emg"
+    inclusion_phrase = inclusion_p1 + inclusion_p2
 
     device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Device: {device}")
 
     # load data (one folder)
-    data1, labels1 = process_h5_files(str(folder_path), sample_size=sample_size, max_zero_samples=400, inclusion_phrase="raw_emg")
+    data1, labels1 = process_h5_files(str(folder_path), sample_size=sample_size, max_zero_samples=400, inclusion_phrase=inclusion_phrase)
 
     # tensors
     data = torch.tensor(data1, dtype=torch.float32)
@@ -119,6 +175,7 @@ def run_evaluation(
         })
 
     return results
+
 
 if __name__ == "__main__":
     # test
