@@ -278,7 +278,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../quick-change-guides/gain_and_scale_modes/" class="md-tabs__link">
+        <a href="../../../quick-change-guides/add_filter/" class="md-tabs__link">
           
   
   
@@ -1830,6 +1830,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1863,6 +1867,29 @@
             Quick change guides
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/add_filter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a filter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1923,6 +1950,29 @@
   
   <span class="md-ellipsis">
     Plotting Guide (view_csv.py)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/switch_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Switching Models
     
   </span>
   
@@ -2060,6 +2110,8 @@
     <span class="n">use_full_model_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">confusion_fixed_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_processed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">model_is_eeg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -2241,7 +2293,8 @@ instantiate a <code>CNN1D_Transformer</code> and load a state_dict.</p>
             <td>
               <div class="doc-md-description">
                 <p>If provided, indicates a fixed name strategy for the confusion
-matrix. (Current implementation saves to <code>confusion_matrix.png</code>.)</p>
+matrix. (Current implementation saves to <code>confusion_matrix.png</code>.)        use_processed:
+boolean indicating whether to search for processed or raw data files</p>
               </div>
             </td>
             <td>
@@ -2406,7 +2459,14 @@ A list of dictionaries (one per repeat) with keys:
 <span class="normal">167</span>
 <span class="normal">168</span>
 <span class="normal">169</span>
-<span class="normal">170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_evaluation</span><span class="p">(</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_evaluation</span><span class="p">(</span>
     <span class="n">folder_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">report_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2418,6 +2478,8 @@ A list of dictionaries (one per repeat) with keys:
     <span class="n">use_full_model_pickle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">confusion_fixed_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_processed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">model_is_eeg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate a trained model on EMG windows stored in a folder.</span>
 
@@ -2451,7 +2513,9 @@ A list of dictionaries (one per repeat) with keys:
 <span class="sd">            Optional ``torch.device``. If ``None``, chooses CUDA when available.</span>
 <span class="sd">        confusion_fixed_name:</span>
 <span class="sd">            If provided, indicates a fixed name strategy for the confusion</span>
-<span class="sd">            matrix. (Current implementation saves to ``confusion_matrix.png``.)</span>
+<span class="sd">            matrix. (Current implementation saves to ``confusion_matrix.png``.)\</span>
+<span class="sd">        use_processed:</span>
+<span class="sd">            boolean indicating whether to search for processed or raw data files</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list[dict]:</span>
@@ -2470,12 +2534,15 @@ A list of dictionaries (one per repeat) with keys:
     <span class="n">model_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
     <span class="n">out_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">report_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
     <span class="n">out_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">inclusion_p1</span> <span class="o">=</span> <span class="s2">&quot;processed_&quot;</span> <span class="k">if</span> <span class="n">use_processed</span> <span class="k">else</span> <span class="s2">&quot;raw_&quot;</span>
+    <span class="n">inclusion_p2</span> <span class="o">=</span> <span class="s2">&quot;eeg&quot;</span> <span class="k">if</span> <span class="n">model_is_eeg</span> <span class="k">else</span> <span class="s2">&quot;emg&quot;</span>
+    <span class="n">inclusion_phrase</span> <span class="o">=</span> <span class="n">inclusion_p1</span> <span class="o">+</span> <span class="n">inclusion_p2</span>
 
     <span class="n">device</span> <span class="o">=</span> <span class="n">device</span> <span class="ow">or</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device: </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># load data (one folder)</span>
-    <span class="n">data1</span><span class="p">,</span> <span class="n">labels1</span> <span class="o">=</span> <span class="n">process_h5_files</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">folder_path</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">max_zero_samples</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">inclusion_phrase</span><span class="o">=</span><span class="s2">&quot;raw_emg&quot;</span><span class="p">)</span>
+    <span class="n">data1</span><span class="p">,</span> <span class="n">labels1</span> <span class="o">=</span> <span class="n">process_h5_files</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">folder_path</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">max_zero_samples</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">inclusion_phrase</span><span class="o">=</span><span class="n">inclusion_phrase</span><span class="p">)</span>
 
     <span class="c1"># tensors</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>

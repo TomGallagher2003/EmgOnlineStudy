@@ -278,7 +278,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../quick-change-guides/gain_and_scale_modes/" class="md-tabs__link">
+        <a href="../../../quick-change-guides/add_filter/" class="md-tabs__link">
           
   
   
@@ -2070,6 +2070,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -2103,6 +2107,29 @@
             Quick change guides
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/add_filter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a filter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2163,6 +2190,29 @@
   
   <span class="md-ellipsis">
     Plotting Guide (view_csv.py)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/switch_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Switching Models
     
   </span>
   
@@ -2387,8 +2437,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
               <details class="quote">
                 <summary>Source code in <code>pages\experiment.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 57</span>
-<span class="normal"> 58</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 58</span>
 <span class="normal"> 59</span>
 <span class="normal"> 60</span>
 <span class="normal"> 61</span>
@@ -3028,7 +3077,8 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 <span class="normal">695</span>
 <span class="normal">696</span>
 <span class="normal">697</span>
-<span class="normal">698</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ExperimentPage</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="normal">698</span>
+<span class="normal">699</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ExperimentPage</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Random movement + Start — session is initialized on entry (device check happens here).</span>
 
 <span class="sd">    This widget manages the full &quot;one attempt&quot; flow: pick a random movement, run a</span>
@@ -3123,7 +3173,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">images_root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="c1"># NEW: default model/report paths (override if needed via params)</span>
+        <span class="c1"># NEW: default model/report paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">images_root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">/</span> <span class="s2">&quot;pipeline_sections&quot;</span> <span class="o">/</span> <span class="s2">&quot;models&quot;</span> <span class="o">/</span> <span class="s2">&quot;model.pth&quot;</span><span class="p">)</span>
 
@@ -3355,7 +3405,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_classification_worker</span> <span class="o">=</span> <span class="n">ClassificationWorker</span><span class="p">(</span>
             <span class="n">folder_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_rec_dir</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">model_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_path</span><span class="p">,</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span>
             <span class="n">report_save_path</span><span class="o">=</span><span class="n">report_path</span><span class="p">,</span>
             <span class="n">sample_size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
@@ -4147,8 +4197,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 81</span>
-<span class="normal"> 82</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
 <span class="normal"> 83</span>
 <span class="normal"> 84</span>
 <span class="normal"> 85</span>
@@ -4226,7 +4275,8 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 <span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
-<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_emg</span><span class="p">,</span> <span class="n">use_eeg</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">160</span>
+<span class="normal">161</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_emg</span><span class="p">,</span> <span class="n">use_eeg</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">use_emg</span> <span class="o">=</span> <span class="n">use_emg</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">use_eeg</span> <span class="o">=</span> <span class="n">use_eeg</span>
@@ -4297,7 +4347,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">images_root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="c1"># NEW: default model/report paths (override if needed via params)</span>
+    <span class="c1"># NEW: default model/report paths</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">images_root</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">model_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">/</span> <span class="s2">&quot;pipeline_sections&quot;</span> <span class="o">/</span> <span class="s2">&quot;models&quot;</span> <span class="o">/</span> <span class="s2">&quot;model.pth&quot;</span><span class="p">)</span>
 
@@ -4330,8 +4380,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">200</span>
-<span class="normal">201</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
 <span class="normal">202</span>
 <span class="normal">203</span>
 <span class="normal">204</span>
@@ -4341,7 +4390,8 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
-<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">resizeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="normal">211</span>
+<span class="normal">212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">resizeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Keep the preview image scaled to the label size on widget resize.&quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_pixmap_path</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_pixmap_path</span><span class="p">):</span>
@@ -4377,8 +4427,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
-<span class="normal">248</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
 <span class="normal">251</span>
@@ -4416,7 +4465,8 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 <span class="normal">283</span>
 <span class="normal">284</span>
 <span class="normal">285</span>
-<span class="normal">286</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pick_random_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">286</span>
+<span class="normal">287</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pick_random_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Select a random movement (avoiding immediate repeats) and update the preview image.&quot;&quot;&quot;</span>
     <span class="c1"># Better randomness + avoid immediate repeats</span>
     <span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">SystemRandom</span><span class="p">()</span>
@@ -4480,8 +4530,7 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">288</span>
-<span class="normal">289</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">289</span>
 <span class="normal">290</span>
 <span class="normal">291</span>
 <span class="normal">292</span>
@@ -4504,7 +4553,8 @@ in-label classification using the H5 artifacts produced by the pipeline.</p>
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
-<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">start_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">312</span>
+<span class="normal">313</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">start_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin a timed recording for the selected movement and hook up callbacks.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arc</span><span class="o">.</span><span class="n">is_running</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
@@ -4645,8 +4695,7 @@ processed_emg_inlabel (np.ndarray | None):
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">527</span>
-<span class="normal">528</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">528</span>
 <span class="normal">529</span>
 <span class="normal">530</span>
 <span class="normal">531</span>
@@ -4804,7 +4853,8 @@ processed_emg_inlabel (np.ndarray | None):
 <span class="normal">683</span>
 <span class="normal">684</span>
 <span class="normal">685</span>
-<span class="normal">686</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movement_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="normal">686</span>
+<span class="normal">687</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movement_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run the online processing pipeline and persist artifacts.</span>
 
@@ -4988,8 +5038,7 @@ processed_emg_inlabel (np.ndarray | None):
 
             <details class="quote">
               <summary>Source code in <code>pages\experiment.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">688</span>
-<span class="normal">689</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">689</span>
 <span class="normal">690</span>
 <span class="normal">691</span>
 <span class="normal">692</span>
@@ -4998,7 +5047,8 @@ processed_emg_inlabel (np.ndarray | None):
 <span class="normal">695</span>
 <span class="normal">696</span>
 <span class="normal">697</span>
-<span class="normal">698</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="normal">698</span>
+<span class="normal">699</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure background threads and the device session are cleanly shut down on close.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flusher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flusher</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>

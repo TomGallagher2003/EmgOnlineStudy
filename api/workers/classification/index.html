@@ -278,7 +278,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../quick-change-guides/gain_and_scale_modes/" class="md-tabs__link">
+        <a href="../../../quick-change-guides/add_filter/" class="md-tabs__link">
           
   
   
@@ -1917,6 +1917,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1950,6 +1954,29 @@
             Quick change guides
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/add_filter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a filter
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2010,6 +2037,29 @@
   
   <span class="md-ellipsis">
     Plotting Guide (view_csv.py)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quick-change-guides/switch_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Switching Models
     
   </span>
   
@@ -2132,8 +2182,7 @@ worker.start()</p>
 
               <details class="quote">
                 <summary>Source code in <code>workers\classification.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 33</span>
-<span class="normal"> 34</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 34</span>
 <span class="normal"> 35</span>
 <span class="normal"> 36</span>
 <span class="normal"> 37</span>
@@ -2242,7 +2291,10 @@ worker.start()</p>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClassificationWorker</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QThread</span><span class="p">):</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClassificationWorker</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QThread</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs post-pipeline classification using H5 written during pipeline.</span>
 
 <span class="sd">    Signals:</span>
@@ -2330,6 +2382,8 @@ worker.start()</p>
                 <span class="n">use_full_model_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># auto-selects CUDA/CPU inside</span>
                 <span class="n">confusion_fixed_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">use_processed</span><span class="o">=</span><span class="n">CLASSIFY_PROCESSED_DATA</span><span class="p">,</span>
+                <span class="n">model_is_eeg</span><span class="o">=</span><span class="n">MODEL_IS_EEG</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
@@ -2739,8 +2793,7 @@ worker.start()</p>
 
             <details class="quote">
               <summary>Source code in <code>workers\classification.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
-<span class="normal">64</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
@@ -2770,7 +2823,8 @@ worker.start()</p>
 <span class="normal">91</span>
 <span class="normal">92</span>
 <span class="normal">93</span>
-<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">folder_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2838,8 +2892,7 @@ worker.start()</p>
 
             <details class="quote">
               <summary>Source code in <code>workers\classification.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 96</span>
-<span class="normal"> 97</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
@@ -2885,7 +2938,10 @@ worker.start()</p>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the evaluation and emit a majority-vote prediction.</span>
 
 <span class="sd">    Workflow:</span>
@@ -2910,6 +2966,8 @@ worker.start()</p>
             <span class="n">use_full_model_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># auto-selects CUDA/CPU inside</span>
             <span class="n">confusion_fixed_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">use_processed</span><span class="o">=</span><span class="n">CLASSIFY_PROCESSED_DATA</span><span class="p">,</span>
+            <span class="n">model_is_eeg</span><span class="o">=</span><span class="n">MODEL_IS_EEG</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
