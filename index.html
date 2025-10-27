@@ -427,6 +427,21 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      - main
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="- main">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#gui-pages" class="md-nav__link">
     <span class="md-ellipsis">
@@ -455,15 +470,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#models-evaluation-helpers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Models &amp; Evaluation Helpers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#utilities-widgets" class="md-nav__link">
     <span class="md-ellipsis">
       Utilities &amp; Widgets
@@ -474,24 +480,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-tips" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuration Tips
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license-acknowledgements" class="md-nav__link">
-    <span class="md-ellipsis">
-      License &amp; Acknowledgements
-    </span>
-  </a>
   
 </li>
       
@@ -1650,10 +1638,7 @@ interactive data collection, on-the-fly processing, and quick EMG classification
 <p>Click into any of the following API pages for detailed references generated with mkdocstrings.</p>
 </blockquote>
 <h3 id="entry-points-windows">Entry Points &amp; Windows<a class="headerlink" href="#entry-points-windows" title="Permanent link">&para;</a></h3>
-<ul>
-<li><a href="api/movement_timer.md"><code>movement_timer</code></a></li>
-<li><a href="api/pages/main/"><code>pages.main</code></a></li>
-</ul>
+<h2 id="-main">- <a href="api/main/"><code>main</code></a><a class="headerlink" href="#-main" title="Permanent link">&para;</a></h2>
 <h3 id="gui-pages">GUI Pages<a class="headerlink" href="#gui-pages" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="api/pages/device_select/"><code>pages.device_select</code></a></li>
@@ -1675,12 +1660,6 @@ interactive data collection, on-the-fly processing, and quick EMG classification
 <li><a href="api/pipeline_sections/reduce_eeg_samples/"><code>pipeline_sections.reduce_eeg_samples</code></a></li>
 <li><a href="api/pipeline_sections/windows/"><code>pipeline_sections.windows</code></a></li>
 </ul>
-<h3 id="models-evaluation-helpers">Models &amp; Evaluation Helpers<a class="headerlink" href="#models-evaluation-helpers" title="Permanent link">&para;</a></h3>
-<ul>
-<li><a href="api/pipeline_sections/models/full_training.md"><code>pipeline_sections.models.full_training</code></a></li>
-<li><a href="api/pipeline_sections/models/evaluation.md"><code>pipeline_sections.models.evaluation</code></a></li>
-<li><a href="api/evaluation_api.md"><code>evaluation_api</code></a></li>
-</ul>
 <h3 id="utilities-widgets">Utilities &amp; Widgets<a class="headerlink" href="#utilities-widgets" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="api/util/images.md"><code>util.images</code></a></li>
@@ -1690,16 +1669,6 @@ interactive data collection, on-the-fly processing, and quick EMG classification
 <li><a href="api/widgets/arc_timer/"><code>widgets.arc_timer</code></a></li>
 </ul>
 <hr />
-<h2 id="configuration-tips">Configuration Tips<a class="headerlink" href="#configuration-tips" title="Permanent link">&para;</a></h2>
-<ul>
-<li>To <strong>skip</strong> internal modules in the API:</li>
-<li>Add <code>__all__ = [...]</code> in modules to define the public surface.</li>
-<li>Or use <code>exclude_members</code> in your API pages.</li>
-<li>Keep <code>window_ms</code> and <code>overlap_ms</code> consistent across pipeline &amp; model to avoid shape mismatches.</li>
-</ul>
-<hr />
-<h2 id="license-acknowledgements">License &amp; Acknowledgements<a class="headerlink" href="#license-acknowledgements" title="Permanent link">&para;</a></h2>
-<p>Add your project license here and acknowledge any hardware SDKs or datasets used.</p>
 
 
 
