@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../gain_and_scale_modes/">
+        <link rel="prev" href="../add_filter/">
       
       
-        <link rel="next" href="../plotting_quick_tweaks/">
+        <link rel="next" href="../gain_and_scale_modes/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Swap Movement Sets & Image Library - EMG/EEG Experiment Program</title>
+        <title>Extending Classification Output - EMG/EEG Experiment Program</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#swap-movement-sets-image-library" class="md-skip">
+        <a href="#extending-classification-output" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Swap Movement Sets & Image Library
+              Extending Classification Output
             
           </span>
         </div>
@@ -1817,10 +1817,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../extended_classification_output/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Extending Classification Output
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1831,6 +1853,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#baseline-what-exists-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      Baseline (what exists now)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-define-a-result-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1 — Define a result schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-produce-output-in-classificationworker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2 — Produce output in ClassificationWorker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-update-the-ui-handler-backward-compatible" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3 — Update the UI handler (backward compatible)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-ui-niceties-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5 — UI niceties (optional)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-minimal-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 6 — Minimal checklist
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1863,32 +1959,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Swap Movement Sets & Image Library
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../movement_sets_and_images/" class="md-nav__link">
         
   
   
@@ -1899,110 +1973,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#tldr" class="md-nav__link">
-    <span class="md-ellipsis">
-      TL;DR
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-change-things" class="md-nav__link">
-    <span class="md-ellipsis">
-      Where to change things
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Where to change things">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#adding-or-replacing-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      Adding or replacing images
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#changing-which-movements-appear" class="md-nav__link">
-    <span class="md-ellipsis">
-      Changing which movements appear
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#label-sanity-important" class="md-nav__link">
-    <span class="md-ellipsis">
-      Label sanity (important)
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Label sanity (important)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-explicit-mapping-advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example: explicit mapping (advanced)
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rest-image-get-ready-screens" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rest image / “get ready” screens
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2077,71 +2047,83 @@
 
 
 
-<h1 id="swap-movement-sets-image-library">Swap Movement Sets &amp; Image Library<a class="headerlink" href="#swap-movement-sets-image-library" title="Permanent link">&para;</a></h1>
-<p>This page shows how to replace the default movement images, change which movements are in Set A / Set B, and keep labels consistent.</p>
-<h2 id="tldr">TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h2>
+<h1 id="extending-classification-output">Extending Classification Output<a class="headerlink" href="#extending-classification-output" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="baseline-what-exists-now">Baseline (what exists now)<a class="headerlink" href="#baseline-what-exists-now" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Edit <code>images.py</code> to point <code>MOVEMENT_IMAGES_A</code>, <code>MOVEMENT_IMAGES_B</code>, and <code>REST</code> to your own image files.</li>
-<li>Keep a consistent naming convention (e.g., <code>M1</code>…<code>M29</code>) so labels stay predictable.</li>
-<li>If you add or remove movements, update any hard‑coded counts in your timers/UI.</li>
+<li><strong>Worker</strong>: <code>ClassificationWorker</code> emits a minimal result like:
+  <div class="highlight"><pre><span></span><code><span class="n">finished_ok</span><span class="o">.</span><span class="n">emit</span><span class="p">((</span><span class="n">pred_class</span><span class="p">,</span> <span class="n">confidence</span><span class="p">))</span>
+</code></pre></div></li>
+<li><strong>UI</strong>: <code>ExperimentPage._on_classification_done(result)</code> expects a 2‑tuple and updates <code>self.results_label</code>.</li>
+<li><strong>Artifacts</strong>: A simple <code>classification_report.txt</code> is written.</li>
 </ul>
-<h2 id="where-to-change-things">Where to change things<a class="headerlink" href="#where-to-change-things" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>File:</strong> <code>images.py</code></li>
-<li><strong>Keys to look for:</strong> <code>MOVEMENT_IMAGES_A</code>, <code>MOVEMENT_IMAGES_B</code>, <code>REST</code></li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Images</span><span class="p">:</span>
+<hr />
+<h2 id="step-1-define-a-result-schema">Step 1 — Define a result schema<a class="headerlink" href="#step-1-define-a-result-schema" title="Permanent link">&para;</a></h2>
+<p><strong>Option A: <code>dataclass</code> (recommended)</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># workers/classification_types.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-    <span class="n">MOVEMENT_IMAGES_A</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;movement_library/EA/Index_flexion_M1.png&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;movement_library/EA/Index_Extension_M2.png&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;movement_library/EA/Middle_Flexion_M3.png&quot;</span><span class="p">,</span>
-      <span class="o">...</span>
-        <span class="p">]</span>
-    <span class="n">MOVEMENT_IMAGES_B</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;movement_library/EB/Thrumb_up_M13.png&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;movement_library/EB/Extension_of_index_and_middle_M14.PNG.png&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;movement_library/EB/Flexion_of_little_and_ring_M15.PNG.png&quot;</span><span class="p">,</span>
-    <span class="o">...</span>     
-    <span class="p">]</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ClassificationResult</span><span class="p">:</span>
+    <span class="n">pred_class</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="o">...</span> <span class="n">a</span> <span class="n">bunch</span> <span class="n">of</span> <span class="n">new</span> <span class="n">fields</span>
+</code></pre></div>
+<p><em>(Alternative: a <code>namedtuple</code> if you prefer.)</em></p>
+<hr />
+<h2 id="step-2-produce-output-in-classificationworker">Step 2 — Produce output in <code>ClassificationWorker</code><a class="headerlink" href="#step-2-produce-output-in-classificationworker" title="Permanent link">&para;</a></h2>
+<p>Inside <code>ClassificationWorker.run()</code> after inference, emit the new structure:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># workers/classification.py</span>
 
-    <span class="n">REST</span> <span class="o">=</span> <span class="s2">&quot;movement_library/Rest_M0.png&quot;</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">ClassificationResult</span><span class="p">(</span>
+    <span class="n">pred_class</span><span class="o">=</span><span class="n">pred_class</span><span class="p">,</span>
+  <span class="o">...</span> <span class="n">a</span> <span class="n">bunch</span> <span class="n">of</span> <span class="n">new</span> <span class="n">fields</span>
+<span class="p">)</span>
+
+<span class="c1"># Emit ONLY the new object (preferred), or both for compatibility:</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">finished_ok</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>                 <span class="c1"># new rich object</span>
+<span class="c1"># self.finished_ok.emit((pred_class, confidence))  # legacy, if needed</span>
 </code></pre></div>
-<h3 id="adding-or-replacing-images">Adding or replacing images<a class="headerlink" href="#adding-or-replacing-images" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Drop your new images into your assets folder (e.g., <code>assets/movements/</code>).</li>
-<li>Update the paths in <code>MOVEMENT_IMAGES_A/B</code> to match.</li>
-<li>(Optional) Keep file names aligned to <code>&lt;short_name&gt;_M&lt;number&gt;.gif</code> to simplify mapping.</li>
-</ol>
-<h3 id="changing-which-movements-appear">Changing which movements appear<a class="headerlink" href="#changing-which-movements-appear" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Remove or reorder entries in <code>MOVEMENT_IMAGES_A/B</code> to control which movements show and in what order.</li>
-<li>If you change set lengths, confirm any code that assumes a fixed count (e.g., <code>len(MOVEMENT_IMAGES_A)</code> in a loop).</li>
-</ul>
-<h2 id="label-sanity-important">Label sanity (important)<a class="headerlink" href="#label-sanity-important" title="Permanent link">&para;</a></h2>
-<p>Many pipelines infer labels from <strong>index position</strong> in A/B:
-- If <strong>Set A index i</strong> maps to label <code>i+1</code>, reordering changes labels.
-- If you need stable labels across releases, either:
-  - Keep order stable and only swap the underlying files, <strong>or</strong>
-  - Maintain a separate <code>{filename → label}</code> mapping and use that to generate labels (you will need to make some changes in timer.py).</p>
-<h3 id="example-explicit-mapping-advanced">Example: explicit mapping (advanced)<a class="headerlink" href="#example-explicit-mapping-advanced" title="Permanent link">&para;</a></h3>
-<p><div class="highlight"><pre><span></span><code><span class="c1"># images.py</span>
-<span class="n">MOVEMENT_LABELS_A</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;assets/movements/M1_open_hand.gif&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;assets/movements/M2_close_fist.gif&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="c1"># ...</span>
-<span class="p">}</span>
+<hr />
+<h2 id="step-3-update-the-ui-handler-backward-compatible">Step 3 — Update the UI handler (backward compatible)<a class="headerlink" href="#step-3-update-the-ui-handler-backward-compatible" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># pages/experiment_page.py (or wherever your handler lives)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_on_classification_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">is_classifying</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">workers.classification_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassificationResult</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">ClassificationResult</span><span class="p">):</span>
+            <span class="n">true_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;movement_id&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;True: </span><span class="si">{</span><span class="n">true_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Pred: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">pred_class</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">,</span>
+                <span class="o">...</span> <span class="n">new</span> <span class="n">fields</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;  • &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  • &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Legacy (pred_class, confidence)</span>
+            <span class="n">pred</span><span class="p">,</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">if</span> <span class="n">conf</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span> <span class="n">conf</span> <span class="o">*=</span> <span class="mf">100.0</span>
+            <span class="n">true_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;movement_id&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;True </span><span class="si">{</span><span class="n">true_id</span><span class="si">}</span><span class="s2"> | Pred: </span><span class="si">{</span><span class="n">pred</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">conf</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span>
+            <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Classification complete.&quot;</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Classification complete.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_random</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btn_start</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_movement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-Then, when building your UI or saving labels, look up the label from the file path.</p>
-<h2 id="rest-image-get-ready-screens">Rest image / “get ready” screens<a class="headerlink" href="#rest-image-get-ready-screens" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="step-5-ui-niceties-optional">Step 5 — UI niceties (optional)<a class="headerlink" href="#step-5-ui-niceties-optional" title="Permanent link">&para;</a></h2>
+<p>To show tables or graphs, look into pygpt widgets, suchs as pyqtgraph</p>
+<hr />
+<h2 id="step-6-minimal-checklist">Step 6 — Minimal checklist<a class="headerlink" href="#step-6-minimal-checklist" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>REST</code> typically points to a neutral image/GIF used between movements.</li>
-<li>You can swap this for a “Get Ready” or countdown graphic if preferred.</li>
-</ul>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Image doesn’t show?</strong> Check the console for a file‑not‑found path.</li>
-<li><strong>Labels offset or wrong?</strong> Revisit ordering and any <code>index_offset</code> logic in the timers.</li>
+<li>[ ] Add <code>workers/classification_types.py</code> (dataclass).</li>
+<li>[ ] Build <code>ClassificationResult</code> in <code>ClassificationWorker.run()</code> and <code>emit</code> it.</li>
+<li>[ ] Update <code>_on_classification_done</code> to accept either tuple or dataclass.</li>
 </ul>
 
 
