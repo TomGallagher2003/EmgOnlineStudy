@@ -1,5 +1,5 @@
-site_name: EMG/EEG Experiment Program
-site_description: Tkinter UI and recording utilities for EMG/EEG exercise sessions
+site_name: EMG/EEG Immediate classification program
+site_description: PyQt UI and recording utilities for EMG/EEG model integration
 
 theme:
   name: material
@@ -39,6 +39,7 @@ nav:
       - Change Probe Modes : quick-change-guides/gain_and_scale_modes.md
       - Swap Movement Sets & Image Library : quick-change-guides/movement_sets_and_images.md
       - Plotting Guide : quick-change-guides/plotting_quick_tweaks.md
+      - Update Classify Output : quick-change-guides/extended_classification_output
   - API Reference: api/SUMMARY.nav
   - Contact: contact.md
 
