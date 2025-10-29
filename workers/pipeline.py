@@ -1,4 +1,4 @@
-from PyPy5 import QtCore
+from PyQt5 import QtCore
 
 
 class PipelineWorker(QtCore.QThread):
