@@ -1,3 +1,5 @@
+import time
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 class ArcTimerWidget(QtWidgets.QWidget):
     finished = QtCore.pyqtSignal()
@@ -21,6 +23,7 @@ class ArcTimerWidget(QtWidgets.QWidget):
 
     def start(self, duration_ms=4000):
         # keep start() flexible, but we’ll usually call set_duration() beforehand
+        time.sleep(0.2)
         self._duration_ms = max(1, int(duration_ms))
         self._elapsed = 0
         self._progress = 0.0
@@ -37,7 +40,7 @@ class ArcTimerWidget(QtWidgets.QWidget):
         return self._timer.isActive()
 
     def _on_tick(self):
-        self._elapsed += self._tick_ms
+        self._elapsed += self._tick_ms * 0.95
         self._progress = min(1.0, self._elapsed / self._duration_ms)
         self.update()
         if self._progress >= 1.0:

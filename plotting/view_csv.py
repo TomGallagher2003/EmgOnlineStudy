@@ -15,7 +15,7 @@ from config import Config
 matplotlib.use('TkAgg')
 
 
-FILENAME = "data/trial_7/rec_2/raw_emg.csv"                           # Set your file name here
+FILENAME = r"data\trial_1\rec_1\raw_emg.csv"                           # Set your file name here
 SINGLE_CHANNEL_MODE = True
 CHANNEL = 12
 

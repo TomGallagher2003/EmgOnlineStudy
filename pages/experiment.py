@@ -16,13 +16,12 @@ from util.mask_to_segments import mask_to_segments
 from util.movement_segmentation import detect_movement_mask
 from util.recording import Session
 from widgets.arc_timer import ArcTimerWidget
+from widgets.live_graph import LiveSignalPlot
 from workers.classification import ClassificationWorker
 from workers.device_init import DeviceInitWorker
 from workers.flush import FlushWorker
 from workers.pipeline import PipelineWorker
 from workers.recording import RecordingWorker
-from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
-from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
 from main_settings import MODEL_PATH
 
 """Experiment execution page (GUI).
@@ -135,6 +134,9 @@ class ExperimentPage(QtWidgets.QWidget):
         self.results_label.setStyleSheet("font-size: 30px;")
         rb_layout.addWidget(self.results_label)
         self.results_box.setVisible(self.use_emg)
+        self.live_plot = LiveSignalPlot(sampling_rate_hz=2000, time_span_sec=5.0)
+        rb_layout.insertWidget(1, self.live_plot, stretch=2)  # place near the top
+        self.live_plot.setVisible(self.use_emg)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.image_label, 3)
@@ -287,27 +289,27 @@ class ExperimentPage(QtWidgets.QWidget):
             self.btn_start.setEnabled(True)
 
     def start_recording(self):
-        """Begin a timed recording for the selected movement and hook up callbacks."""
-        if self.arc.is_running() or self.session is None:
-            return
-        if self.current_movement is None:
-            QtWidgets.QMessageBox.information(self, "Pick a movement", "Please choose a movement first.")
-            return
-
-        # Stop the idle flusher right before starting to record
+        # ... your existing guards ...
         self._stop_flusher()
-
         self.status_label.setText("Recording…")
         self.btn_random.setEnabled(False)
         self.btn_start.setEnabled(False)
         self.recording_done = False
-        # Reset results panel for the new attempt (only if EMG path is visible)
-        if self.use_emg:
-            self.results_label.setText("Classification Results:")
 
-        self.recording_worker = RecordingWorker(self.session, self.params["recording_length"], parent=self)
-        # start arc on actual capture start; duration follows user-set recording length
-        self.recording_worker.capture_started.connect(lambda: self.arc.start(int(self.params["recording_length"] * 1000)))
+        if self.use_emg:
+            self.live_plot.clear()
+
+        self.recording_worker = RecordingWorker(
+            self.session,
+            self.params["recording_length"],
+            parent=self,
+            chunk_sec=0.02,  # update cadence
+            emit_every_n_chunks=1,  # emit every chunk (or 2/3 to throttle)
+        )
+        self.recording_worker.capture_started.connect(
+            lambda: self.arc.start(int(self.params["recording_length"] * 1000))
+        )
+        self.recording_worker.sofar_ready.connect(self._on_emg_sofar)  # NEW
         self.recording_worker.finished_ok.connect(self._on_recording_finished)
         self.recording_worker.failed.connect(self._on_recording_failed)
         self.recording_worker.start()
@@ -522,6 +524,37 @@ class ExperimentPage(QtWidgets.QWidget):
             pass
         # Fallback
         return self._window_by_samples_fallback(arr, win_samp, overlap_samp)
+
+    @QtCore.pyqtSlot(object)
+    def _on_emg_sofar(self, sofar):
+        # sofar: (channels, samples_so_far)
+        if not self.use_emg or self.live_plot is None:
+            return
+        a = np.asarray(sofar)
+        if a.ndim != 2 or a.shape[0] == 0 or a.shape[1] == 0:
+            return
+
+        # Map EMG-space index to raw channel index
+        emg_map = getattr(self.session.config, "MUOVI_EMG_CHANNELS", None)
+        ch_emg = int(getattr(self, "live_emg_channel", 0))
+        if emg_map and 0 <= ch_emg < len(emg_map):
+            raw_ch = emg_map[ch_emg]
+        else:
+            raw_ch = ch_emg
+
+        if not (0 <= raw_ch < a.shape[0]):
+            return
+
+        vec = a[raw_ch, :]
+
+        # If your ADC is unsigned, center DISPLAY ONLY (do NOT modify saved data)
+        if vec.dtype.kind == 'u':
+            mid = (np.iinfo(vec.dtype).max + 1) / 2.0
+            vec = vec.astype(np.float32, copy=False) - mid
+        else:
+            vec = vec.astype(np.float32, copy=False)
+
+        self.live_plot.set_series(vec)
 
     # ---- Pipeline ----------------------------------------------------------
 

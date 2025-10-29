@@ -1,79 +1,95 @@
+# workers/recording.py
+from typing import Optional, List
+import numpy as np
 from PyQt5 import QtCore
-
 from util.recording import Session
-
-"""Background recording worker thread.
-
-This module provides :class:`RecordingWorker`, a thin QThread wrapper that
-records for a fixed duration using an existing :class:`util.recording.Session`
-and emits signals for UI coordination. It is designed for use in PyQt5 apps
-where the main thread must remain responsive while EMG/EEG capture runs.
-
-Example:
-    >>> # inside a QWidget or MainWindow
-    >>> worker = RecordingWorker(session, rec_len=5.0, parent=self)
-    >>> worker.capture_started.connect(lambda: print("Capture started"))
-    >>> worker.finished_ok.connect(lambda data: print("Got", data.shape))
-    >>> worker.failed.connect(lambda msg: print("Failed:", msg))
-    >>> worker.start()
-"""
 
 
 class RecordingWorker(QtCore.QThread):
-    """Run a fixed-length recording in a background thread.
-
-    Signals:
-        finished_ok (object): Emitted with the recorded data (e.g., NumPy array)
-            when capture succeeds.
-        failed (str): Emitted with an error message if capture fails or returns
-            no data.
-        capture_started (): Emitted immediately before recording begins to allow
-            the UI to update state (e.g., disable buttons or show spinners).
-
-    Notes:
-        - This worker **does not** create or configure the device; it assumes the
-          provided :class:`util.recording.Session` is already initialized and ready.
-        - The thread emits exactly one terminal signal: either ``finished_ok`` or
-          ``failed``. Consumers should disconnect or delete the worker afterward.
-    """
-
-    finished_ok = QtCore.pyqtSignal(object)
+    finished_ok = QtCore.pyqtSignal(object)    # (channels, total_samples)
     failed = QtCore.pyqtSignal(str)
     capture_started = QtCore.pyqtSignal()
+    sofar_ready = QtCore.pyqtSignal(object)    # (channels, samples_so_far), cumulative
 
-    def __init__(self, session: Session, rec_len: float, parent=None):
-        """Initialize the worker.
-
-        Args:
-            session: A pre-initialized recording session used to acquire data.
-            rec_len: Desired recording duration in seconds.
-            parent: Optional QObject parent for normal Qt ownership semantics.
-
-        """
+    def __init__(
+        self,
+        session: Session,
+        rec_len: float,
+        parent: Optional[QtCore.QObject] = None,
+        *,
+        chunk_sec: float = 0.05,   # 50 ms @ 2 kHz ≈ 100 samples
+        emit_every_n_chunks: int = 1,  # throttle UI updates if you like
+    ):
         super().__init__(parent)
         self.session = session
-        self.rec_len = rec_len
+        self.rec_len = float(max(0.0, rec_len))
+        self.chunk_sec = float(max(0.005, chunk_sec))
+        self.emit_every_n_chunks = max(1, int(emit_every_n_chunks))
 
     def run(self) -> None:
-        """Execute the capture on a background thread.
-
-        Workflow:
-            1. Emit ``capture_started`` to allow the UI to react.
-            2. Call ``session.get_record(rec_time=rec_len, flush=False)``.
-            3. If no data is returned, emit ``failed``.
-            4. Otherwise, emit ``finished_ok`` with the data.
-
-        Emitted:
-            capture_started: Before starting the blocking capture call.
-            finished_ok: On successful capture with the data payload.
-            failed: On exceptions or empty results, with a human-readable message.
-        """
         try:
+            if self.isInterruptionRequested():
+                self.failed.emit("Recording interrupted before start.")
+                return
+            if self.rec_len <= 0.0:
+                self.failed.emit("Recording length must be > 0.")
+                return
+
             self.capture_started.emit()
-            data = self.session.get_record(rec_time=self.rec_len, flush=False)
-            if data is None or getattr(data, "size", 0) == 0:
+
+            # One-shot path if chunk >= total
+            if self.chunk_sec >= self.rec_len:
+                data = self.session.get_record(rec_time=self.rec_len, flush=False)
+                if data is None or getattr(data, "size", 0) == 0:
+                    self.failed.emit("Recording returned no data.")
+                    return
+                a = np.asarray(data)
+                if a.ndim == 1:
+                    a = a.reshape(1, -1)
+                elif a.ndim == 2 and a.shape[0] > a.shape[1]:
+                    # if somehow (samples, channels), transpose to (channels, samples)
+                    a = a.T
+                self.sofar_ready.emit(a)   # final snapshot
+                self.finished_ok.emit(a)
+                return
+
+            # Chunked path
+            remaining = self.rec_len
+            chunks: List[np.ndarray] = []
+            nchunks = 0
+
+            while remaining > 1e-6 and not self.isInterruptionRequested():
+                step = min(self.chunk_sec, remaining)
+                try:
+                    chunk = self.session.get_record(rec_time=step, flush=False)
+                except Exception:
+                    chunk = None
+
+                if chunk is not None and getattr(chunk, "size", 0) > 0:
+                    a = np.asarray(chunk)
+                    if a.ndim == 1:
+                        a = a.reshape(1, -1)
+                    elif a.ndim == 2 and a.shape[0] > a.shape[1]:
+                        # ensure (channels, samples)
+                        a = a.T
+                    chunks.append(a)
+                    nchunks += 1
+
+                    if (nchunks % self.emit_every_n_chunks) == 0:
+                        # Build cumulative snapshot for the UI
+                        sofar = np.concatenate(chunks, axis=1)
+                        self.sofar_ready.emit(sofar)
+
+                remaining -= step
+
+            if not chunks:
                 self.failed.emit("Recording returned no data.")
                 return
-            self.finished_ok.emit(data)
+
+            full = np.concatenate(chunks, axis=1)  # (channels, total_samples)
+            # Ensure final snapshot emitted at least once
+            self.sofar_ready.emit(full)
+            self.finished_ok.emit(full)
+
         except Exception as e:
             self.failed.emit(str(e))
