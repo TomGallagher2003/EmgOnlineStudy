@@ -39,27 +39,52 @@ class DeviceSelectPage(QtWidgets.QWidget):
             parent: Optional Qt parent widget.
         """
         super().__init__(parent)
-        title = QtWidgets.QLabel("Select Devices")
-        title.setAlignment(QtCore.Qt.AlignCenter)
-        title.setStyleSheet("font-size: 20px; font-weight: 600;")
 
-        self.cb_emg = QtWidgets.QCheckBox("Use EMG (Muovi)")
+        # --- Styles: larger fonts + bigger checkbox indicator
+        self.setStyleSheet("""
+            QLabel#title { font-size: 24px; font-weight: 700; }
+            QCheckBox { font-size: 18px; }
+            QCheckBox::indicator { width: 22px; height: 22px; }
+            QPushButton { font-size: 16px; padding: 8px 18px; }
+        """)
+
+        # Title
+        title = QtWidgets.QLabel("Select Devices", self)
+        title.setObjectName("title")
+        title.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Checkboxes
+        self.cb_emg = QtWidgets.QCheckBox("Use EMG (Muovi)", self)
         self.cb_emg.setChecked(True)
-        self.cb_eeg = QtWidgets.QCheckBox("Use EEG (Muovi+)")
+        self.cb_eeg = QtWidgets.QCheckBox("Use EEG (Muovi+)", self)
         self.cb_eeg.setChecked(False)
 
-        btn_continue = QtWidgets.QPushButton("Continue")
-        btn_continue.setFixedHeight(36)
+        # Continue button
+        btn_continue = QtWidgets.QPushButton("Continue", self)
+        btn_continue.setFixedHeight(40)
         btn_continue.clicked.connect(self._on_continue)
 
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addSpacing(16)
-        layout.addWidget(title)
-        layout.addSpacing(12)
-        layout.addWidget(self.cb_emg)
-        layout.addWidget(self.cb_eeg)
-        layout.addStretch(1)
-        layout.addWidget(btn_continue)
+        # --- Center everything horizontally & vertically ---
+        # Outer layout fills the widget; inner layout is centered.
+        outer = QtWidgets.QVBoxLayout(self)
+        outer.setContentsMargins(24, 24, 24, 24)
+
+        inner = QtWidgets.QVBoxLayout()
+        inner.setSpacing(16)
+        inner.setAlignment(QtCore.Qt.AlignCenter)  # centers children horizontally & vertically as a block
+
+        # Add widgets to inner (centered) stack
+        inner.addWidget(title, 0, QtCore.Qt.AlignHCenter)
+        inner.addSpacing(8)
+        inner.addWidget(self.cb_emg, 0, QtCore.Qt.AlignHCenter)
+        inner.addWidget(self.cb_eeg, 0, QtCore.Qt.AlignHCenter)
+        inner.addSpacing(12)
+        inner.addWidget(btn_continue, 0, QtCore.Qt.AlignHCenter)
+
+        # Use stretch to keep the inner block vertically centered within the page
+        outer.addStretch(1)
+        outer.addLayout(inner)
+        outer.addStretch(1)
 
     def _on_continue(self):
         """Emit the chosen modality configuration and let the caller advance."""
