@@ -1,15 +1,9 @@
-# main.py
-# PyQt5 app: device select -> parameter entry -> device check/init -> random movement -> arc timer
-# -> run_pipeline() -> (classification if EMG: in-label only)
-# - Device check/init happens right after parameters screen (session kept open)
-# - Recording runs in background; pipeline runs after; classification runs only if EMG present
 
-"""Launcher for the movement-timer desktop app.
+"""Launcher for the immediate classification program.
 
-This module boots the PyQt5 GUI that drives your end-to-end EMG/EEG workflow:
+This module boots the PyQt5 GUI that drives the end-to-end EMG/EEG workflow:
 device selection → parameter entry → device init/check → randomized movement
-prompting with an arc timer → post-recording pipeline (feature extraction /
-training / evaluation) → optional in-label classification for EMG.
+prompting with an arc timer → post-recording pipeline → classification for.
 
 Usage:
     Run this file directly to start the application:
