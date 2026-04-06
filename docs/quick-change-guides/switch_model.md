@@ -5,14 +5,20 @@ summary: Switch models and update classification input to fit
 
 # Switching Models
 
-Models can be switched simply in `main_settings.py`. This configuration file has 3 important fields to define the model.
+Models are configured in `main_settings.py`.
 
 ```python
 # Model Info
-MODEL_PATH = str("." / "pipeline_sections" / "models" / "model.pth")
-MODEL_IS_EEG = False             # False: EMG, True: EEG
-CLASSIFY_PROCESSED_DATA = False  # False: raw data used for classification, True: processed data used for classification
+MODEL_PATH        = "./pipeline_sections/models/model.pth"        # EMG model
+EEG_MODEL_PATH    = "./pipeline_sections/models/eeg_model.pth"    # EEG model
+FUSION_MODEL_PATH = "./pipeline_sections/models/fusion_model.pth" # Fusion model
 
+# Set ONE of: "emg" | "eeg" | "fusion"
+MODEL_MODE = "emg"
+
+CLASSIFY_PROCESSED_DATA = False  # False: raw data, True: processed (windowed) data
 ```
 
-All of these fields must be correct to match the models expected input format, and determine which data will be used for classification.
+Set `MODEL_MODE` to select which modality is classified, and point the matching `*_MODEL_PATH` to your checkpoint. All fields must be consistent with the model's expected input.
+
+For EEG-only or fusion workflows, see the [EEG & Fusion Models](eeg_and_fusion_models.md) guide.

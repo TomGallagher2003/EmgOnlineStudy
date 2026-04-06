@@ -128,6 +128,61 @@ class CNN1D_Transformer(nn.Module):
         x = self.transformer(x)
         return x
 
+class FusionModel(nn.Module):
+    def __init__(self, emg_channels, eeg_channels, length, embed_dim, num_heads, num_layers, num_classes):
+        """Late-fusion model combining independent EMG and EEG CNN-Transformer branches.
+
+        Each modality is processed by its own CNN1D_Transformer (without the final
+        classifier). The two feature vectors are concatenated and passed to a shared
+        classification head.
+
+        Args:
+            emg_channels: Number of EMG input channels.
+            eeg_channels: Number of EEG input channels.
+            length: Window length in samples (same for both modalities after resampling).
+            embed_dim: Transformer embedding dimension.
+            num_heads: Number of attention heads.
+            num_layers: Number of transformer layers.
+            num_classes: Number of output classes.
+        """
+        super().__init__()
+        self.emg_cnn = CNN1D(emg_channels, length, embed_dim)
+        self.eeg_cnn = CNN1D(eeg_channels, length, embed_dim)
+
+        seq_len = length // 4  # after two MaxPool1d(2)
+        self.emg_transformer = nn.TransformerEncoder(
+            nn.TransformerEncoderLayer(d_model=128, nhead=num_heads, batch_first=True),
+            num_layers=num_layers,
+        )
+        self.eeg_transformer = nn.TransformerEncoder(
+            nn.TransformerEncoderLayer(d_model=128, nhead=num_heads, batch_first=True),
+            num_layers=num_layers,
+        )
+        self.fc = nn.Linear(2 * seq_len * 128, num_classes)
+
+    def forward(self, emg, eeg):
+        """Forward pass with separate EMG and EEG tensors.
+
+        Args:
+            emg: Tensor of shape (B, emg_channels, T).
+            eeg: Tensor of shape (B, eeg_channels, T).
+
+        Returns:
+            Logits tensor of shape (B, num_classes).
+        """
+        e = self.emg_cnn(emg)                   # (B, 128, T/4)
+        e = e.permute(0, 2, 1)                  # (B, T/4, 128)
+        e = self.emg_transformer(e)             # (B, T/4, 128)
+        e = e.reshape(e.size(0), -1)            # (B, T/4 * 128)
+
+        g = self.eeg_cnn(eeg)
+        g = g.permute(0, 2, 1)
+        g = self.eeg_transformer(g)
+        g = g.reshape(g.size(0), -1)
+
+        return self.fc(torch.cat([e, g], dim=1))
+
+
 def process_emg_data(file_path, sample_size=512):
     """
     Process EMG data and segment it based on labels.

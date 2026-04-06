@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 import numpy as np
 from PyQt5 import QtCore
 
-from pipeline_sections.classify import run_evaluation
+from pipeline_sections.classify import run_evaluation, run_fusion_evaluation
 from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
 from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
 from main_settings import CLASSIFY_PROCESSED_DATA, MODEL_IS_EEG
@@ -142,5 +142,59 @@ class ClassificationWorker(QtCore.QThread):
 
             self.finished_ok.emit((pred_class, confidence))
 
+        except Exception as e:
+            self.failed.emit(str(e))
+
+
+class FusionClassificationWorker(QtCore.QThread):
+    """Runs post-pipeline fusion classification using both EMG and EEG H5 files.
+
+    Signals:
+        finished_ok (object): Emitted with ``(pred_class, confidence)``.
+        failed (str): Emitted on error.
+    """
+
+    finished_ok = QtCore.pyqtSignal(object)
+    failed = QtCore.pyqtSignal(str)
+
+    def __init__(
+        self,
+        folder_path: str,
+        model_path: str,
+        report_save_path: str,
+        *,
+        sample_size: int = 512,
+        batch_size: int = 512,
+        num_classes: int = 30,
+        parent=None,
+    ):
+        super().__init__(parent)
+        self.folder_path = folder_path
+        self.model_path = model_path
+        self.report_save_path = report_save_path
+        self.sample_size = sample_size
+        self.batch_size = batch_size
+        self.num_classes = num_classes
+
+    def run(self) -> None:
+        try:
+            result = run_fusion_evaluation(
+                folder_path=self.folder_path,
+                model_path=self.model_path,
+                report_save_path=self.report_save_path,
+                sample_size=self.sample_size,
+                batch_size=self.batch_size,
+                num_classes=self.num_classes,
+                device=None,
+            )
+            preds = np.asarray(result.get("preds", []))
+            if preds.size == 0:
+                self.finished_ok.emit(("", 0.0))
+                return
+            vals, counts = np.unique(preds, return_counts=True)
+            idx = int(np.argmax(counts))
+            pred_class = str(int(vals[idx]))
+            confidence = float(counts[idx]) / float(preds.size)
+            self.finished_ok.emit((pred_class, confidence))
         except Exception as e:
             self.failed.emit(str(e))

@@ -16,14 +16,14 @@ from util.mask_to_segments import mask_to_segments
 from util.movement_segmentation import detect_movement_mask
 from util.recording import Session
 from widgets.arc_timer import ArcTimerWidget
-from workers.classification import ClassificationWorker
+from workers.classification import ClassificationWorker, FusionClassificationWorker
 from workers.device_init import DeviceInitWorker
 from workers.flush import FlushWorker
 from workers.pipeline import PipelineWorker
 from workers.recording import RecordingWorker
 from pipeline_sections.models.full_training import process_h5_files, evaluate_model, EMGDataset, CNN1D_Transformer, CNN1D, TransformerModel
 from pipeline_sections.models.evaluation import ChannelAdapter, CNN1D, CNN1D_Transformer, TransformerModel, EMGDataset, DataLoader
-from main_settings import MODEL_PATH
+from main_settings import MODEL_PATH, EEG_MODEL_PATH, FUSION_MODEL_PATH, MODEL_MODE
 
 """Experiment execution page (GUI).
 
@@ -134,7 +134,7 @@ class ExperimentPage(QtWidgets.QWidget):
         self.results_label.setMinimumHeight(36)
         self.results_label.setStyleSheet("font-size: 30px;")
         rb_layout.addWidget(self.results_label)
-        self.results_box.setVisible(self.use_emg)
+        self.results_box.setVisible(self.use_emg or self.use_eeg)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.image_label, 3)
@@ -358,38 +358,60 @@ class ExperimentPage(QtWidgets.QWidget):
 
     # ----- Pipeline step callbacks -----
     def _on_pipeline_done(self, processed_tuple):
-        """Handle pipeline completion and, if EMG enabled, begin classification."""
+        """Handle pipeline completion and begin classification based on MODEL_MODE."""
         self.is_pipeline_running = False
 
-        # If EMG not selected, or not a proper tuple, skip classification.
-        if not self.use_emg or not isinstance(processed_tuple, tuple) or len(processed_tuple) != 2:
+        can_classify_emg = self.use_emg and MODEL_MODE in ("emg", "fusion")
+        can_classify_eeg = self.use_eeg and MODEL_MODE in ("eeg", "fusion")
+        can_classify = can_classify_emg or can_classify_eeg
+
+        if not can_classify or not isinstance(processed_tuple, tuple):
             self.status_label.setText("Pipeline complete.")
             self.btn_random.setEnabled(True)
             self.btn_start.setEnabled(self.session is not None and self.current_movement is not None)
             return
 
-        _, processed_emg_inlabel = processed_tuple  # classify IN-LABEL ONLY (kept for shape checks if needed)
-
-        # Start CLASSIFICATION step using saved H5 in the current recording dir
         self.is_classifying = True
         self.status_label.setText("Classifying...")
 
-        # Construct worker with paths (folder/model/report)
-        # sample_size should match the windowing used for EMG
         fs_emg = self._get_fs("emg")
         sample_size = self._ms_to_samples(self.params["window_ms"], fs_emg)
         report_path = os.path.join(self._current_rec_dir, "classification_report.txt")
+        folder = self._current_rec_dir or ""
 
-        self._classification_worker = ClassificationWorker(
-            folder_path=self._current_rec_dir or "",
-            model_path=MODEL_PATH,
-            report_save_path=report_path,
-            sample_size=sample_size,
-            batch_size=512,
-            num_classes=30,
-            repeats=1,
-            parent=self
-        )
+        if MODEL_MODE == "fusion":
+            self._classification_worker = FusionClassificationWorker(
+                folder_path=folder,
+                model_path=FUSION_MODEL_PATH,
+                report_save_path=report_path,
+                sample_size=sample_size,
+                batch_size=512,
+                num_classes=30,
+                parent=self,
+            )
+        elif MODEL_MODE == "eeg":
+            self._classification_worker = ClassificationWorker(
+                folder_path=folder,
+                model_path=EEG_MODEL_PATH,
+                report_save_path=report_path,
+                sample_size=sample_size,
+                batch_size=512,
+                num_classes=30,
+                repeats=1,
+                parent=self,
+            )
+        else:  # "emg"
+            self._classification_worker = ClassificationWorker(
+                folder_path=folder,
+                model_path=MODEL_PATH,
+                report_save_path=report_path,
+                sample_size=sample_size,
+                batch_size=512,
+                num_classes=30,
+                repeats=1,
+                parent=self,
+            )
+
         self._classification_worker.finished_ok.connect(self._on_classification_done)
         self._classification_worker.failed.connect(self._on_classification_failed)
         self._classification_worker.start()
@@ -676,8 +698,15 @@ class ExperimentPage(QtWidgets.QWidget):
                 windowed = self._call_window_data_safe(normalised, win_eeg, ov_eeg)
                 if getattr(windowed, "ndim", 0) != 3:
                     print("Warning: EEG windowing produced unexpected shape.")
+
+                with h5py.File(os.path.join(rec_dir, "raw_eeg.h5"), "w") as f:
+                    f.create_dataset("emg", data=eeg_data)
+                    f.create_dataset("label", data=label)
+
                 with h5py.File(os.path.join(rec_dir, "processed_eeg.h5"), "w") as f:
-                    f.create_dataset("windowed_data", data=windowed)
+                    f.create_dataset("emg", data=windowed)
+                    win_labels_eeg = window_labels(label, sample_size=win_eeg, overlap=ov_eeg)
+                    f.create_dataset("label", data=win_labels_eeg)
 
         print("[processing] pipeline completed")
         if processed_emg_all is not None:

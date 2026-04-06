@@ -22,6 +22,22 @@ from pipeline_sections.models.evaluation import (
     ChannelAdapter
 )
 
+class _FusionDataset(torch.utils.data.Dataset):
+    def __init__(self, emg_data, eeg_data, labels):
+        self.emg = emg_data
+        self.eeg = eeg_data
+        self.labels = labels
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        return (
+            torch.tensor(self.emg[idx], dtype=torch.float32),
+            torch.tensor(self.eeg[idx], dtype=torch.float32),
+            torch.tensor(self.labels[idx], dtype=torch.long),
+        )
+
 """Lightweight evaluation wrapper for EMG classification models.
 
 This module provides :func:`run_evaluation`, a callable entry point that mirrors
@@ -175,6 +191,78 @@ def run_evaluation(
         })
 
     return results
+
+
+def run_fusion_evaluation(
+    folder_path: str,
+    model_path: str,
+    report_save_path: str,
+    *,
+    sample_size: int = 512,
+    batch_size: int = 512,
+    num_classes: int = 30,
+    device: torch.device | None = None,
+):
+    """Evaluate a FusionModel on paired EMG + EEG H5 files in folder_path.
+
+    Loads ``raw_emg.h5`` and ``raw_eeg.h5`` from the same folder, aligns their
+    window counts (truncates to the shorter), runs inference through the fusion
+    model, and writes a classification report.
+
+    Args:
+        folder_path: Directory containing raw_emg.h5 and raw_eeg.h5.
+        model_path: Path to a pickled FusionModel checkpoint.
+        report_save_path: File path for the classification_report text output.
+        sample_size: Window length used for both modalities.
+        batch_size: DataLoader batch size.
+        num_classes: Number of output classes.
+        device: Optional torch.device; auto-selects CUDA when None.
+
+    Returns:
+        dict with keys ``"report"``, ``"preds"``, ``"labels"``.
+    """
+    folder_path = Path(folder_path)
+    device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    emg_data, emg_labels = process_h5_files(str(folder_path), sample_size=sample_size,
+                                             max_zero_samples=400, inclusion_phrase="raw_emg")
+    eeg_data, eeg_labels = process_h5_files(str(folder_path), sample_size=sample_size,
+                                             max_zero_samples=400, inclusion_phrase="raw_eeg")
+
+    n = min(len(emg_labels), len(eeg_labels))
+    emg_data, eeg_data, labels = emg_data[:n], eeg_data[:n], emg_labels[:n]
+
+    indices = np.random.permutation(n)
+    emg_data, eeg_data, labels = emg_data[indices], eeg_data[indices], labels[indices]
+
+    dataset = _FusionDataset(emg_data, eeg_data, labels)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+
+    model = torch.load(str(model_path), map_location=device, weights_only=False)
+    model.to(device)
+    model.eval()
+
+    all_preds, all_labels = [], []
+    with torch.no_grad():
+        for emg_b, eeg_b, lbl_b in loader:
+            emg_b = emg_b.permute(0, 2, 1).to(device)
+            eeg_b = eeg_b.permute(0, 2, 1).to(device)
+            lbl_b = lbl_b.to(device)
+            out = model(emg_b, eeg_b)
+            _, predicted = torch.max(out, 1)
+            all_preds.extend(predicted.cpu().numpy())
+            all_labels.extend(lbl_b.cpu().numpy())
+
+    from sklearn.metrics import classification_report as skl_report
+    report = skl_report(all_labels, all_preds, digits=4, zero_division=0)
+    Path(report_save_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(report_save_path, "w", encoding="utf-8") as f:
+        f.write(report)
+
+    plot_confusion_matrix(all_labels, all_preds, num_classes,
+                          path=str(folder_path / "confusion_matrix.png"))
+
+    return {"report": report, "preds": np.asarray(all_preds), "labels": np.asarray(all_labels)}
 
 
 if __name__ == "__main__":
